@@ -1,0 +1,99 @@
+{
+  "version": 3,
+  "targets": {
+    "net6.0": {
+      "Threenine.LinqToCsv/1.6.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/LINQtoCSV.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/LINQtoCSV.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Threenine.LinqToCsv/1.6.0": {
+      "sha512": "13P/4as7uN39me1qZUmYCSphq4MdjUG90anak7CbNhOGh5tYPlFlDCBYnO0mFFdGFhVv+OoU7yA0vAnc9y8uDg==",
+      "type": "package",
+      "path": "threenine.linqtocsv/1.6.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/LINQtoCSV.dll",
+        "threenine.linqtocsv.1.6.0.nupkg.sha512",
+        "threenine.linqtocsv.nuspec"
+      ]
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net6.0": [
+      "Threenine.LinqToCsv >= 1.6.0"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\Admin\\.nuget\\packages\\": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "C:\\Users\\Admin\\Desktop\\C#\\TeaStorel\\TeaStorel.csproj",
+      "projectName": "TeaStorel",
+      "projectPath": "C:\\Users\\Admin\\Desktop\\C#\\TeaStorel\\TeaStorel.csproj",
+      "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Admin\\Desktop\\C#\\TeaStorel\\obj\\",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "net6.0"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "projectReferences": {}
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      }
+    },
+    "frameworks": {
+      "net6.0": {
+        "targetAlias": "net6.0",
+        "dependencies": {
+          "Threenine.LinqToCsv": {
+            "target": "Package",
+            "version": "[1.6.0, )"
+          }
+        },
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.400\\RuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}

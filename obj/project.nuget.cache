@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "lo7aUGbsJR1uakec4s88W26F/2woao9aOgSBRWzDQQGKQThbfClJKCejYuZ87O8DO90bxLuuzkJJ8eCtEgrkvw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Admin\\Desktop\\C#\\TeaStorel\\TeaStorel.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Admin\\.nuget\\packages\\threenine.linqtocsv\\1.6.0\\threenine.linqtocsv.1.6.0.nupkg.sha512"
+  ],
+  "logs": []
+}

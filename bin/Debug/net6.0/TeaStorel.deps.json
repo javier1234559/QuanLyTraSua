@@ -1,0 +1,41 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "TeaStorel/1.0.0": {
+        "dependencies": {
+          "Threenine.LinqToCsv": "1.6.0"
+        },
+        "runtime": {
+          "TeaStorel.dll": {}
+        }
+      },
+      "Threenine.LinqToCsv/1.6.0": {
+        "runtime": {
+          "lib/netstandard2.0/LINQtoCSV.dll": {
+            "assemblyVersion": "1.6.0.0",
+            "fileVersion": "1.6.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "TeaStorel/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Threenine.LinqToCsv/1.6.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-13P/4as7uN39me1qZUmYCSphq4MdjUG90anak7CbNhOGh5tYPlFlDCBYnO0mFFdGFhVv+OoU7yA0vAnc9y8uDg==",
+      "path": "threenine.linqtocsv/1.6.0",
+      "hashPath": "threenine.linqtocsv.1.6.0.nupkg.sha512"
+    }
+  }
+}
