@@ -4,15 +4,21 @@ namespace MilkTeaStore
 {
     class Oder
     {
-        public double discountCode;
-        public List<Product> ListDrink;
+        public string BillID { get; set; }
+        public  string ProductID { get; set; }
+        public int ProductQuantity { get; set; }
+
         public Oder(){
-            ListDrink = new List<Product> ();
+
         }
-        public Oder(List<Product> listDrink)
+
+        public Oder(string billID, string productID, int productQuantity)
         {
-            ListDrink = listDrink;
+            BillID = billID;
+            ProductID = productID;
+            ProductQuantity = productQuantity;
         }
+
         /*public void addOder()
         {
             Console.Write("Hay nhap so luong : ");
@@ -50,15 +56,8 @@ namespace MilkTeaStore
                 Console.WriteLine("{0,-10} {1,-10} {2,5}", thucUong.Name, thucUong.slOder,tonggia);
             }
         }*/
-        public void editOder()
-        {
-            Console.WriteLine("Hay nhap vi tri chinh sua ");
-            int index = Int32.Parse(Console.ReadLine());
 
-        }
-        //public void DeleteOder()
 
-        
     }
 
 

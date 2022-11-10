@@ -1,115 +1,129 @@
-﻿namespace MilkTeaStore
+﻿using LINQtoCSV;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+
+namespace MilkTeaStore
 {
-    partial class Program
+    //Generic
+    public class Database<T> where T : class ,new()
     {
-        class Database
+        public static string DiscountFilePath { get; set; } = "DataBase//dicount.csv";
+        public static string CustomerFilePath { get; set; } = "DataBase//customer.csv";
+        public static string StaffFilePath { get; set; } = "DataBase//staff.csv";
+        public static string BillFilePath { get; set; } = "DataBase//bill.csv";
+        public static string OderFilePath { get; set; } = "DataBase//oder.csv";
+        public static string ProductFilePath { get; set; } = "DataBase//product.csv";
+        public static string SupplyFilePath { get; set; } = "DataBase//supply.csv";
+        public static string IngredientFilePath { get; set; } = "DataBase//ingredient.csv";
+
+        public Database()
         {
-            //string filePath = "DataBase\\Customer.txt";
-            public string FilePath { get; set; }
-            public Database(string filepath)
-            {
-                FilePath = filepath;
-            }
-
-            //Get customer
-            public List<Customer> getCustomerData()
-            {
-                List<Customer> customerList = new List<Customer>();
-
-                List<string> lines = File.ReadAllLines(FilePath).ToList();
-
-                foreach (string line in lines)
+               
+        }
+        public static void writeFile(List<T> listobjects, string filepath)
+        {
+            var csvFileConfig = new CsvFileDescription
                 {
-                    string[] entries = line.Split(',');
+                    FirstLineHasColumnNames = true,
+                    SeparatorChar = ',',
+                };
 
-                    Customer customer = new Customer();
-                    customer.Id = entries[0];
-                    customer.Name = entries[1];
-                    customer.Numberphone = entries[2];
-                    customer.Address = entries[3];
+            var csvContext = new CsvContext();
+            ProductFilePath = filepath;
+            csvContext.Write(listobjects, ProductFilePath, csvFileConfig);
+        }
 
-                    customerList.Add(customer);
-                }
-
-                return customerList;
-            }
-            public int setCustomerData(List<Customer> customerList)
+        public static List<T> readFile(string filepath)
+        { 
+            CsvFileDescription inputFileDescription = new CsvFileDescription
             {
-                List<string> output = new List<string>();
-                foreach (Customer customer in customerList)
-                {
-                    output.Add($"{customer.Id},{customer.Name},{customer.Numberphone},{customer.Address}");
-                }
-                // writing to file
-                File.WriteAllLines(FilePath, output);
-
-                return 1;
+                SeparatorChar = ',',
+                FirstLineHasColumnNames = true
+            };
+            CsvContext cc = new CsvContext();
+            var list = cc.Read<T>(filepath, inputFileDescription);
+                
+            return list.ToList<T>();
             }
-            public int addCustomerData(List<Customer> addcustomerList)
+
+        public static void CreateDatabase()
+        {
+            var customerList = new List<Customer>
             {
-                List<string> output = new List<string>();
-                foreach (Customer customer in addcustomerList)
-                {
-                    output.Add($"{customer.Id},{customer.Name},{customer.Numberphone},{customer.Address}");
-                }
-                // writing to file
-                File.AppendAllLines(FilePath, output);
-
-                return 1;
-            }
-            
-            //Get Staff
-            public List<Staff> getStaffData()
+                new Customer("cus1","Nhat","09422323","40/104fdfsdf"),
+                new Customer("cus2", "Hung", "09422323", "40/104fdfsdf"),
+                new Customer("cus3", "Hang", "09422323", "40/104fdfsdf")
+            };
+            var ProductList = new List<Product>
             {
-                List<Staff> staffList = new List<Staff>();
-
-                List<string> lines = File.ReadAllLines(FilePath).ToList();
-
-                foreach (string line in lines)
-                {
-                    string[] entries = line.Split(',');
-
-                    Staff staff = new Staff();
-                    staff.Id = entries[0];
-                    staff.Name = entries[1];
-                    staff.Numberphone = entries[2];
-                    staff.Address = entries[3];
-                    staff.WorkSchedule = entries[4];
-                    staff.Position = entries[5];
-                    staff.Salary = long.Parse(entries[6]);
-                    staff.AbsentDay = Int32.Parse(entries[7]);
-
-                    staffList.Add(staff);
-                }
-
-                return staffList;
-            }
-            public int setStaffData(List<Staff> staffList)
+                new Product("item1","Tra Sua",20000,SIZE.S,10,0,0,190),
+                new Product("item2","Tra Sua",20000,SIZE.L,10,0,0,20),
+                new Product("item3","Tra Sua",20000,SIZE.M,10,0,0,40),
+                new Product("item4","Tra Dao",10000,SIZE.S,10,0,0,20),
+                new Product("item5","Tra Dao",10000,SIZE.L,10,0,0,20),
+                new Product("item6","Tra Dao",10000,SIZE.M,10,0,0,20),
+                new Product("item7","Chanh Leo",15000,SIZE.M,10,0,0,50),
+                new Product("item8","Chanh Leo",15000,SIZE.M,10,0,0,20),
+                new Product("item9","Chanh Leo",15000,SIZE.M,10,0,0,30),
+            };
+            var StaffList = new List<Staff>
             {
-                List<string> output = new List<string>();
-                foreach (var staff in staffList)
-                {
-                    output.Add($"{staff.Id},{staff.Name},{staff.Numberphone},{staff.Address},{staff.WorkSchedule},{staff.Position},{staff.Salary},{staff.AbsentDay}");
-                }
-                // writing to file
-                File.WriteAllLines(FilePath, output);
-
-                return 1;
-            }
-            public int addStaffData(List<Staff> addstaffList)
+                new Staff("staff1","Ngoc","1234567","20/3 duong hang tre","Fulltime","NhanVien",1200,0),
+                new Staff("staff2","Ngoc","1234567","20/3 duong hang tre","Fulltime","NhanVien",1200,0),
+                new Staff("staff3","Ngoc","1234567","20/3 duong hang tre","Fulltime","NhanVien",1200,0),
+            };
+            var DiscountList = new List<Discount>
             {
-                List<string> output = new List<string>();
-                foreach (var staff in addstaffList)
-                {
-                    output.Add($"{staff.Id},{staff.Name},{staff.Numberphone},{staff.Address},{staff.WorkSchedule},{staff.Position},{staff.Salary},{staff.AbsentDay}");
-                }
-                // writing to file
-                File.AppendAllLines(FilePath, output);
+                new Discount("discount1",0.2f,"Giam gia giang sinh"),
+                new Discount("discount2",0.2f,"Giam gia sinh nhat"),
+                new Discount("discount3",0.2f,"Giam gia mua 10 ly"),
+            };
+            var IngredientList = new List<Ingredient> {
+                new Ingredient("ingre1","Sugar",3000,"Cat Linh"),
+                new Ingredient("ingre2","Chan Chau",1000,"Cat Linh"),
+                new Ingredient("ingre3","Sugar",200,"Cat Linh")
+            };
+            var BillList = new List<Bill> {
+                new Bill("bill1","cus1","staff1","20/10/2002","discount1",20000),
+                new Bill("bill2","cus2","staff1","20/10/2002","discount1",40000),
+                new Bill("bill3","cus1","staff1","20/12/2002","discount1",20000),
+                new Bill("bill4","cus1","staff1","20/12/2002","discount1",20000),
+                new Bill("bill5","cus1","staff1","20/12/2002","discount1",20000),
+            };
 
-                return 1;
-            }
+            Database<Customer>.writeFile(customerList, Database<T>.CustomerFilePath);
+            Database<Product>.writeFile(ProductList, Database<T>.ProductFilePath);
+            Database<Staff>.writeFile(StaffList, Database<T>.StaffFilePath);
+            Database<Discount>.writeFile(DiscountList, Database<T>.DiscountFilePath);
+            Database<Bill>.writeFile(BillList, Database<T>.BillFilePath);
+            Database<Ingredient>.writeFile(IngredientList, Database<T>.IngredientFilePath);
 
 
         }
+        public static void Table(List<T> oblist) {
+            var label = oblist[0];
+            foreach (PropertyDescriptor d in TypeDescriptor.GetProperties(label))
+            {
+                string name = d.Name;
+                Console.Write("{0,-14}", name);
+            }
+            foreach (var o in oblist) {
+               
+                Console.WriteLine();
+                /*foreach (PropertyDescriptor d in TypeDescriptor.GetProperties(o))
+                {
+                    Console.Write(" {0,-10}", "-------------");
+                }
+                Console.WriteLine();*/
+                foreach (PropertyDescriptor d in TypeDescriptor.GetProperties(o))
+                {
+                    object value = d.GetValue(o);
+                    Console.Write("|{0,-13}", value);
+                }
+            }
+            Console.WriteLine();
+        }
+        
+
     }
 }

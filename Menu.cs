@@ -1,54 +1,121 @@
-﻿using System.Runtime.ConstrainedExecution;
+﻿using System.Runtime.CompilerServices;
+using System.Runtime.ConstrainedExecution;
 
 namespace MilkTeaStore
 {
     class Menu
     {
-       
-        public static List<Product> dsthucuong;
-
-        public Menu()
+        public static bool statusMenu = true;
+        public Menu() { }
+        public static bool WelcomeMenu()
         {
-            int[] dsOriginalPrice = { 50, 100, 150, 200 };
-            int[] dsPrice = { 100, 200, 300, 400 };
-            string[] dsNname = { "Nuoc Ngot", "Tra Sua", "Nuoc Cam", "Tra Dao" };
-            int[] slStocking = { 10, 20, 30, 40 };
-
-            // Dong tren co the thay the bang DOCFILE
-            for (int i = 0; i < dsNname.Length; i++)
+            Console.Clear();
+            Console.WriteLine(String.Format("{0}{1,-55}", "", "Welcome to TeaStore"));
+            Console.WriteLine(String.Format("{0}{1,-55}", "", "-----------------------"));
+            Console.WriteLine(String.Format("{0}{1,-55}", "", "Vui long nhap vai tro :"));
+            Console.WriteLine(String.Format("{0}{1,-55}", "1.", "Khach Hang"));
+            Console.WriteLine(String.Format("{0}{1,-55}", "2.", "Quan Ly"));
+            Console.WriteLine("\nEnter q to exit ");
+            Console.Write("Select an option : ");
+            switch (Console.ReadLine())
             {
-                dsthucuong.Add( new Product(dsNname[i], dsPrice[i], dsOriginalPrice[i], slStocking[i]));
+                case "1":
+                    CustomerMenu();
+                    return true;
+                case "2":
+                    Console.WriteLine("1");
+                    return true;
+                case "q":
+                    Console.Clear();
+                    Console.WriteLine("Ket Thuc Chuong Trinh !");
+                    statusMenu = false;
+                    return false;
+                default:
+                    return true;
+            }
+        
+        }
+        public static bool CustomerMenu()
+        {
+            Console.Clear();
+            Console.WriteLine(String.Format("{0}{1,-55}", "", "Khach hang"));
+            Console.WriteLine(String.Format("{0}{1,-55}", "", "-----------------------"));
+            Console.WriteLine(String.Format("{0}{1,-55}", "1.", "Dat Hang"));
+            Console.WriteLine(String.Format("{0}{1,-55}", "2.", "Lich su hoa don"));
+            Console.WriteLine("\nEnter -1 to back ");
+            Console.WriteLine("Enter q to end ");
+            Console.Write("Select an option : ");
+            switch (Console.ReadLine())
+            {
+                case "1":
+                    Customer cus1 = new Customer();
+                    cus1.CreateNewOder();
+                    return true;
+                case "2":
+                    string name, numberphone;
+                    Console.WriteLine("Vui long nhap ten va so dien thoai lan dat truoc: ");
+                    Console.Write("Ten khach hang : ");
+                    name = Console.ReadLine();
+                    Console.Write("So dien thoai : ");
+                    numberphone = Console.ReadLine();
+                    Customer cus = new Customer(name, numberphone);
+
+                    cus.HistoryBuying();
+                    return true;
+                case "-1":
+                    WelcomeMenu();
+                    return true;
+                case "q":
+                    Console.Clear();
+                    Console.WriteLine("Ket Thuc Chuong Trinh !");
+                    statusMenu = false;
+                    return false;
+                default:
+                    return true;
+            }
+        }
+        public static bool OderMenu()
+        {
+            List<Product> products = null;
+            products = Database<Product>.readFile(Database<Product>.ProductFilePath);
+           
+            Console.Clear();
+
+            Console.WriteLine(String.Format("{0}", "Danh sach cac thuc uong"));
+            Console.WriteLine(String.Format("{0}", "-----------------------"));
+            /*    String data = String.Format(" {0,-15} {1,-20} {2,-10} {3, -10} \n", "ID", "Ten", "Size", "Price");
+                data += String.Format(" {0,-15} {1,-20} {2,-10} {3, -10} \n", underline, underline, underline, underline); ;
+
+                foreach (Product p in products)
+                {
+                    data += String.Format("|{0,-14}| {1,-19}| {2, -9}| {3, -9} \n",
+                    p.ProductID, p.Name, p.Size, p.Price);
+                }
+                Console.WriteLine($"\n{data}");*/
+            Database<Product>.Table(products);
+
+            Console.WriteLine("Enter q to exit ");
+            Console.Write("Select an option : ");
+            switch (Console.ReadLine())
+            {
+               
+                case "1": // Chua hoan tat ham
+                    Console.WriteLine("1");
+                    return true;
+                case "2":
+                    Console.WriteLine("2");
+                    return true;
+                case "q":
+                    Console.Clear();
+                    Console.WriteLine("Ket Thuc Chuong Trinh !");
+                    statusMenu = false;
+                    return false;
+                default:
+                    return true;
             }
 
-        }
-        public void printMenu() {
-            Console.WriteLine("---------------Menu--------------- ");
-            Console.WriteLine("{0,-20} {1,5:N1}", "Ten san pham", "Muc gia");
-            foreach(var i in dsthucuong.Select((value,index) => (value,index)))
-            {
-                Console.WriteLine("{0,-20} {1,5}", i.value.Name, i.value.Price);
-            }
-            Console.WriteLine("---------------------------------- ");
+
         }
 
-       /* public int checkNameMenu(string name)
-        {
-            foreach(var i in dsNname.Select((name,index) => (name,index)))
-            {
-                if (name.Equals(i.name))
-                    return i.index;
-            }
-            return -1;
-        }*/
-        public int getPricebyIndex(int index)
-        {
-            int price = 0;
-            return price;
-        }
-      /*  public int getOriginalPrice(int index)
-        {
-            int originalprice = dsOriginalPrice[index];
-            return originalprice;
-        }*/
     }
 }

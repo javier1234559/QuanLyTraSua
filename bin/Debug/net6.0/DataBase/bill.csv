@@ -1,0 +1,6 @@
+﻿BillID,CusID,StaffID,DiscountID,Total,Date
+bill1,cus1,staff1,discount1,20000,20/10/2002
+bill2,cus2,staff1,discount1,40000,20/10/2002
+bill3,cus1,staff1,discount1,20000,20/12/2002
+bill4,cus1,staff1,discount1,20000,20/12/2002
+bill5,cus1,staff1,discount1,20000,20/12/2002

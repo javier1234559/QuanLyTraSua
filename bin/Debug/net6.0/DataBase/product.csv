@@ -1,0 +1,10 @@
+﻿ProductID,Name,Price,Size,OriginalPrice,bestSeller,rate,quantityInStock
+item1,Tra Sua,20000,S,10,0,0,190
+item2,Tra Sua,20000,L,10,0,0,20
+item3,Tra Sua,20000,M,10,0,0,40
+item4,Tra Dao,10000,S,10,0,0,20
+item5,Tra Dao,10000,L,10,0,0,20
+item6,Tra Dao,10000,M,10,0,0,20
+item7,Chanh Leo,15000,M,10,0,0,50
+item8,Chanh Leo,15000,M,10,0,0,20
+item9,Chanh Leo,15000,M,10,0,0,30
