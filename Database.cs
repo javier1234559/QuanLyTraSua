@@ -1,6 +1,9 @@
 ﻿using LINQtoCSV;
 using System.ComponentModel;
+using System.Linq;
+using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
+using System.Xml.Linq;
 
 namespace MilkTeaStore
 {
@@ -45,38 +48,37 @@ namespace MilkTeaStore
                 
             return list.ToList<T>();
             }
-
         public static void CreateDatabase()
         {
             var customerList = new List<Customer>
             {
-                new Customer("cus1","Nhat","09422323","40/104fdfsdf"),
-                new Customer("cus2", "Hung", "09422323", "40/104fdfsdf"),
-                new Customer("cus3", "Hang", "09422323", "40/104fdfsdf")
+                new Customer(1,"Nhat","0962472106","40/104fdfsdf"),
+                new Customer(2, "Hung", "0123456789", "40/104fdfsdf"),
+                new Customer(3, "Hang", "09422323", "40/104fdfsdf")
             };
             var ProductList = new List<Product>
             {
-                new Product("item1","Tra Sua",20000,SIZE.S,10,0,0,190),
-                new Product("item2","Tra Sua",20000,SIZE.L,10,0,0,20),
-                new Product("item3","Tra Sua",20000,SIZE.M,10,0,0,40),
-                new Product("item4","Tra Dao",10000,SIZE.S,10,0,0,20),
-                new Product("item5","Tra Dao",10000,SIZE.L,10,0,0,20),
-                new Product("item6","Tra Dao",10000,SIZE.M,10,0,0,20),
-                new Product("item7","Chanh Leo",15000,SIZE.M,10,0,0,50),
-                new Product("item8","Chanh Leo",15000,SIZE.M,10,0,0,20),
-                new Product("item9","Chanh Leo",15000,SIZE.M,10,0,0,30),
+                 new Product(1,"Tra Sua",SIZE.S,10000,10,0,0,190),
+                new Product(2,"Tra Sua",SIZE.L,10000,10,0,0,20),
+                new Product(3,"Tra Sua",SIZE.M,10000,10,0,0,40),
+                new Product(4,"Tra Dao",SIZE.S,10000,10,0,0,20),
+                new Product(5,"Tra Dao",SIZE.L,10000,10,0,0,20),
+                new Product(6,"Tra Dao",SIZE.M,10000,10,0,0,20),
+                new Product(7,"Chanh Leo",SIZE.M,10000,10,0,0,50),
+                new Product(8,"Chanh Leo",SIZE.M,10000,10,0,0,20),
+                new Product(9,"Chanh Leo",SIZE.M,10000,10,0,0,30),
             };
             var StaffList = new List<Staff>
             {
-                new Staff("staff1","Ngoc","1234567","20/3 duong hang tre","Fulltime","NhanVien",1200,0),
-                new Staff("staff2","Ngoc","1234567","20/3 duong hang tre","Fulltime","NhanVien",1200,0),
-                new Staff("staff3","Ngoc","1234567","20/3 duong hang tre","Fulltime","NhanVien",1200,0),
+                new Staff(1,"Ngoc","1234567","20/3 duong hang tre","Fulltime","NhanVien",1200,0),
+                new Staff(2,"Ngoc","1234567","20/3 duong hang tre","Fulltime","NhanVien",1200,0),
+                new Staff(3,"Ngoc","1234567","20/3 duong hang tre","Fulltime","NhanVien",1200,0),
             };
             var DiscountList = new List<Discount>
             {
-                new Discount("discount1",0.2f,"Giam gia giang sinh"),
-                new Discount("discount2",0.2f,"Giam gia sinh nhat"),
-                new Discount("discount3",0.2f,"Giam gia mua 10 ly"),
+                new Discount(1,0.2f,"Giam gia giang sinh"),
+                new Discount(2,0.2f,"Giam gia sinh nhat"),
+                new Discount(3,0.2f,"Giam gia mua 10 ly"),
             };
             var IngredientList = new List<Ingredient> {
                 new Ingredient("ingre1","Sugar",3000,"Cat Linh"),
@@ -84,23 +86,31 @@ namespace MilkTeaStore
                 new Ingredient("ingre3","Sugar",200,"Cat Linh")
             };
             var BillList = new List<Bill> {
-                new Bill("bill1","cus1","staff1","20/10/2002","discount1",20000),
-                new Bill("bill2","cus2","staff1","20/10/2002","discount1",40000),
-                new Bill("bill3","cus1","staff1","20/12/2002","discount1",20000),
-                new Bill("bill4","cus1","staff1","20/12/2002","discount1",20000),
-                new Bill("bill5","cus1","staff1","20/12/2002","discount1",20000),
+                new Bill(1,1,1,"20/10/2002","discount1",20000),
+                new Bill(2,1,1,"20/10/2002","discount1",20000),
+                new Bill(3,1,1,"20/10/2002","discount1",20000),
+                new Bill(4,1,1,"20/10/2002","discount1",20000),
             };
 
+            /*var oders = new List<Oder> {
+                new Oder(9,2,30),
+                new Oder(9,1,30),
+                new Oder(9,1,30),
+                new Oder(9,5,30),
+                new Oder(11,5,30),
+            };*/
             Database<Customer>.writeFile(customerList, Database<T>.CustomerFilePath);
             Database<Product>.writeFile(ProductList, Database<T>.ProductFilePath);
             Database<Staff>.writeFile(StaffList, Database<T>.StaffFilePath);
             Database<Discount>.writeFile(DiscountList, Database<T>.DiscountFilePath);
             Database<Bill>.writeFile(BillList, Database<T>.BillFilePath);
             Database<Ingredient>.writeFile(IngredientList, Database<T>.IngredientFilePath);
+            //Database<Oder>.writeFile(oders, Database<Oder>.OderFilePath); //add to database
 
 
         }
-        public static void Table(List<T> oblist) {
+        public static void Table(IEnumerable<T> enumerable) {
+            List<T> oblist = enumerable.ToList();
             var label = oblist[0];
             foreach (PropertyDescriptor d in TypeDescriptor.GetProperties(label))
             {
@@ -110,11 +120,6 @@ namespace MilkTeaStore
             foreach (var o in oblist) {
                
                 Console.WriteLine();
-                /*foreach (PropertyDescriptor d in TypeDescriptor.GetProperties(o))
-                {
-                    Console.Write(" {0,-10}", "-------------");
-                }
-                Console.WriteLine();*/
                 foreach (PropertyDescriptor d in TypeDescriptor.GetProperties(o))
                 {
                     object value = d.GetValue(o);
@@ -123,7 +128,36 @@ namespace MilkTeaStore
             }
             Console.WriteLine();
         }
-        
+        public static void QueryTable(IEnumerable<T> enumerable,string[] labels )
+        {
+            List<T> oblist = enumerable.ToList();
+            foreach(string label in labels)
+            {
+                Console.Write("{0,-14}", label);
+            }
+            Console.WriteLine();
+            foreach (var o in oblist)
+            {
+                string name ="";
+                int labelIndex = 0;
+                foreach (PropertyDescriptor d in TypeDescriptor.GetProperties(o))
+                {
+                    name = d.Name;
+                    for(int i = labelIndex; i < labels.Length;i++)
+                    {
+                        if(name == labels[i])
+                        {
+                            object value = d.GetValue(o);
+                            Console.Write("|{0,-13}", value);
+                        }
+                        labelIndex++;
+                        break;
+                    }
+                }
+                Console.WriteLine();
+
+            }
+        }
 
     }
 }

@@ -7,18 +7,26 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Reflection;
 using System.ComponentModel;
+using System.Xml.Linq;
+using System.Collections;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MilkTeaStore
 {
+    class kqquery{
+
+
+    }
     class Program
     {
         static void Main(string[] args)
         {
-            Database<Bill>.CreateDatabase();
+           /* Database<Bill>.CreateDatabase();*/
             while (Menu.statusMenu)
             {
                 Menu.WelcomeMenu();
             }
+           
 
         }
     }

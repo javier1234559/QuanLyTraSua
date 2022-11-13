@@ -1,63 +1,93 @@
 ﻿using MilkTeaStore;
+using System.Collections.Generic;
 
 namespace MilkTeaStore
 {
     class Oder
     {
-        public string BillID { get; set; }
-        public  string ProductID { get; set; }
+        public int BillID { get; set; }
+        public  int ProductID { get; set; }
         public int ProductQuantity { get; set; }
-
         public Oder(){
 
         }
-
-        public Oder(string billID, string productID, int productQuantity)
+        public Oder(int billID, int productID, int productQuantity)
         {
             BillID = billID;
             ProductID = productID;
             ProductQuantity = productQuantity;
         }
-
-        /*public void addOder()
+        public void addOder()
         {
-            Console.Write("Hay nhap so luong : ");
-            int sl = Int32.Parse(Console.ReadLine());
-            for(int i = 0; i < sl; i++)
+            List<Oder> oders = Database<Oder>.readFile(Database<Oder>.OderFilePath);
+            List<Product> products = Database<Product>.readFile(Database<Product>.ProductFilePath);
+            List<Bill> bills = Database<Bill>.readFile(Database<Bill>.BillFilePath);
+            this.ProductID = 0;
+
+            while (true)
             {
-                Console.WriteLine("Hay nhap ten sp ");
-                String name = Console.ReadLine();
-                Console.WriteLine("Hay nhap kich thuoc [S,M,L]  ");
-                string tem = Console.ReadLine().ToUpper(); 
-                SIZE size = Enum.Parse<SIZE>(tem);
-                Console.WriteLine("Hay nhap so luong : ");
-                int productSl = Int32.Parse(Console.ReadLine());
-
-                Menu menu = new Menu();
-                int index = menu.checkNameMenu(name);
-                int price = menu.getPricebyIndex(index);
-                int originalPrice = menu.getOriginalPrice(index);
-
-                ListDrink.Add(new ThucUong(name, price, size, originalPrice,productSl));
-                Console.WriteLine();
-            }
-
-        }*/
-        /*public void printOderList()
-        {
-            Console.WriteLine("{0,-10} {1,-10} {2,5}", "Ten sp", "So luong", "Gia");
-            foreach (Product thucUong in ListDrink)
-            {
-                int tonggia = thucUong.Price;
-                if(thucUong.slOder >= 2)
+                //--Check add oder
+                while (true)
                 {
-                    tonggia *= thucUong.slOder;
-                }
-                Console.WriteLine("{0,-10} {1,-10} {2,5}", thucUong.Name, thucUong.slOder,tonggia);
+                    Console.Write("Nhap id de oder :");
+                    this.ProductID = Int32.Parse(Console.ReadLine());
+                    var list = from p in products
+                               where p.ProductID == this.ProductID
+                               select p;
+                    if (list.Any(cus => cus.ProductID == this.ProductID))
+                        break;
+                    Console.WriteLine("Ma san pham khong hop le vui long nhap lai ! ");
+                };
+                Console.Write("Nhap so luong va bam c sau do de hoan tat: ");
+                this.ProductQuantity = Int32.Parse(Console.ReadLine());
+
+                //--Add oder to oder table
+                this.BillID = bills.Any() ? bills.Max(x => x.BillID) + 1 : 1; // tang id cua Bill len 1
+                oders.Add(new Oder(this.BillID, this.ProductID, this.ProductQuantity));
+                Console.Write("----------------");
+                string c = Console.ReadLine();
+                if (c == "c") break;
             }
-        }*/
 
+            Database<Oder>.writeFile(oders, Database<Oder>.OderFilePath); //add to database
+            printOderList();
+            Console.WriteLine("<---- Back");
+            Console.ReadLine();
+        }
+        public void printOderList(){
+            Console.WriteLine("Danh sach oder : ");
+            List<Oder> oders = Database<Oder>.readFile(Database<Oder>.OderFilePath);
+            var list = oders.Where(o => o.BillID == this.BillID);
+            Database<Oder>.Table(list);
+        }
+        public bool deleteOder()
+        {
+            List<Oder> oders = Database<Oder>.readFile(Database<Oder>.OderFilePath);
+            List<Product> products = Database<Product>.readFile(Database<Product>.ProductFilePath);
+            //--Check id sp
+            int id;
+            while (true)
+            {
+                Console.Write("Nhap id san pham muon xoa :");
+                id = Int32.Parse(Console.ReadLine());
+                var list = from o in oders
+                           where o.ProductID == id
+                           select o;
+                if (list.Any(oder => oder.ProductID == id))
+                    break;
+                Console.WriteLine("Ma san pham khong hop le vui long nhap lai ! ");
+            };
 
+            oders.RemoveAll(x => x.ProductID == id);
+            
+            Database<Oder>.writeFile(oders, Database<Oder>.OderFilePath); //add to database
+            
+            printOderList();
+            Console.WriteLine("<---- Back");
+            Console.ReadLine();
+
+            return true;
+        }
     }
 
 

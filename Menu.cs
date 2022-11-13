@@ -78,40 +78,38 @@ namespace MilkTeaStore
         {
             List<Product> products = null;
             products = Database<Product>.readFile(Database<Product>.ProductFilePath);
-           
-            Console.Clear();
+            Oder oder = new Oder(); // Oder khai bao toan cuc
 
-            Console.WriteLine(String.Format("{0}", "Danh sach cac thuc uong"));
-            Console.WriteLine(String.Format("{0}", "-----------------------"));
-            /*    String data = String.Format(" {0,-15} {1,-20} {2,-10} {3, -10} \n", "ID", "Ten", "Size", "Price");
-                data += String.Format(" {0,-15} {1,-20} {2,-10} {3, -10} \n", underline, underline, underline, underline); ;
-
-                foreach (Product p in products)
-                {
-                    data += String.Format("|{0,-14}| {1,-19}| {2, -9}| {3, -9} \n",
-                    p.ProductID, p.Name, p.Size, p.Price);
-                }
-                Console.WriteLine($"\n{data}");*/
-            Database<Product>.Table(products);
-
-            Console.WriteLine("Enter q to exit ");
-            Console.Write("Select an option : ");
-            switch (Console.ReadLine())
+            while (true)
             {
-               
-                case "1": // Chua hoan tat ham
-                    Console.WriteLine("1");
-                    return true;
-                case "2":
-                    Console.WriteLine("2");
-                    return true;
-                case "q":
-                    Console.Clear();
-                    Console.WriteLine("Ket Thuc Chuong Trinh !");
-                    statusMenu = false;
-                    return false;
-                default:
-                    return true;
+                Console.Clear();
+                Console.WriteLine(String.Format("{0}", "Danh sach cac thuc uong"));
+                Console.WriteLine(String.Format("{0}", "-----------------------"));
+                //Xuat bang
+                string[] labels = { "ProductID", "Name", "Size", "Price" };
+                Database<Product>.QueryTable(products, labels);
+
+                Console.WriteLine("1.Them Oder");
+                Console.WriteLine("2.Xoa Oder");
+                Console.WriteLine("3. Exit ");
+                Console.Write("Select an option : ");
+                switch (Console.ReadLine())
+                {
+                    case "1": // Chua hoan tat ham
+                        oder.addOder();
+                        break;
+                    case "2":
+                        oder.printOderList();
+                        oder.deleteOder() ;
+                        break;
+                    case "3":
+                        Console.Clear();
+                        Console.WriteLine("Ket Thuc Chuong Trinh !");
+                        statusMenu = false;
+                        return false;
+                    default:
+                        return true;
+                }
             }
 
 

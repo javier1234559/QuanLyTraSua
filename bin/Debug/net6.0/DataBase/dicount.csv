@@ -1,4 +1,4 @@
 ﻿DiscountID,DiscountVal,DiscountName
-discount1,0.2,Giam gia giang sinh
-discount2,0.2,Giam gia sinh nhat
-discount3,0.2,Giam gia mua 10 ly
+1,0.2,Giam gia giang sinh
+2,0.2,Giam gia sinh nhat
+3,0.2,Giam gia mua 10 ly

@@ -9,10 +9,10 @@
 
     class Product
     {
-        public string ProductID { get; set; }
+        public int ProductID { get; set; }
         public string Name { get; set; }
-        public int Price { get; set; }
         public SIZE Size { get; set; }
+        public int Price { get; set; }
         public int OriginalPrice { get; set; }
         public int bestSeller { get; set; }
         public float rate { get; set; }
@@ -21,13 +21,12 @@
         {
 
         }
-
-        public Product(string productID, string name, int price, SIZE size, int originalPrice, int bestSeller, float rate, int slStocking)
+        public Product(int productID, string name, SIZE size, int price, int originalPrice, int bestSeller, float rate, int slStocking)
         {
             ProductID = productID;
             Name = name;
-            Price = price;
             Size = size;
+            Price = price;
             OriginalPrice = originalPrice;
             this.bestSeller = bestSeller;
             this.rate = rate;
