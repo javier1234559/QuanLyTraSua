@@ -58,8 +58,8 @@ namespace MilkTeaStore
                     name = Console.ReadLine();
                     Console.Write("So dien thoai : ");
                     numberphone = Console.ReadLine();
-                    Customer cus = new Customer(name, numberphone);
 
+                    Customer cus = new Customer(name, numberphone);
                     cus.HistoryBuying();
                     return true;
                 case "-1":
@@ -91,11 +91,12 @@ namespace MilkTeaStore
 
                 Console.WriteLine("1.Them Oder");
                 Console.WriteLine("2.Xoa Oder");
-                Console.WriteLine("3. Exit ");
+                Console.WriteLine("3.Hoan Tat Oder");
+                Console.WriteLine("4. Exit ");
                 Console.Write("Select an option : ");
                 switch (Console.ReadLine())
                 {
-                    case "1": // Chua hoan tat ham
+                    case "1": 
                         oder.addOder();
                         break;
                     case "2":
@@ -103,6 +104,9 @@ namespace MilkTeaStore
                         oder.deleteOder() ;
                         break;
                     case "3":
+                        oder.addOderToDatabase();
+                        break;
+                    case "4":
                         Console.Clear();
                         Console.WriteLine("Ket Thuc Chuong Trinh !");
                         statusMenu = false;

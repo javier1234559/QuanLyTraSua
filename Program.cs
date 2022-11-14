@@ -22,12 +22,14 @@ namespace MilkTeaStore
         static void Main(string[] args)
         {
            /* Database<Bill>.CreateDatabase();*/
-            while (Menu.statusMenu)
+            /*while (Menu.statusMenu)
             {
                 Menu.WelcomeMenu();
-            }
-           
+            }*/
+            Bill bill = new Bill(1);
 
+            long a =bill.TotalBill();
+            Console.WriteLine(a);
         }
     }
 

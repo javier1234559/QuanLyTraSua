@@ -19,7 +19,6 @@ namespace MilkTeaStore
         {
             this.CusId = id;
         }
-
         public void HistoryBuying (){
             List<Bill> billList = Database<Bill>.readFile(Database<Bill>.BillFilePath);
             List<Customer> customerlist = Database<Customer>.readFile(Database<Customer>.CustomerFilePath);
@@ -67,7 +66,7 @@ namespace MilkTeaStore
             Console.ReadLine();//Stop screen
             Menu.OderMenu();
         }
-        public void CreateNewOderMenu()
+        public void CreateNewOderMenu() // khong biet co nen bo o Customer ko
         {
             Console.Clear();
             Console.WriteLine(String.Format("{0}{1,-55}", "", "Nhap thong tin dat hang"));

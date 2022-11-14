@@ -8,6 +8,7 @@ namespace MilkTeaStore
         public int BillID { get; set; }
         public  int ProductID { get; set; }
         public int ProductQuantity { get; set; }
+        public List<Oder> oders { get; set; }
         public Oder(){
 
         }
@@ -19,7 +20,7 @@ namespace MilkTeaStore
         }
         public void addOder()
         {
-            List<Oder> oders = Database<Oder>.readFile(Database<Oder>.OderFilePath);
+            this.oders = Database<Oder>.readFile(Database<Oder>.OderFilePath);
             List<Product> products = Database<Product>.readFile(Database<Product>.ProductFilePath);
             List<Bill> bills = Database<Bill>.readFile(Database<Bill>.BillFilePath);
             this.ProductID = 0;
@@ -41,7 +42,7 @@ namespace MilkTeaStore
                 Console.Write("Nhap so luong va bam c sau do de hoan tat: ");
                 this.ProductQuantity = Int32.Parse(Console.ReadLine());
 
-                //--Add oder to oder table
+                //--Add oder to oders 
                 this.BillID = bills.Any() ? bills.Max(x => x.BillID) + 1 : 1; // tang id cua Bill len 1
                 oders.Add(new Oder(this.BillID, this.ProductID, this.ProductQuantity));
                 Console.Write("----------------");
@@ -49,20 +50,22 @@ namespace MilkTeaStore
                 if (c == "c") break;
             }
 
-            Database<Oder>.writeFile(oders, Database<Oder>.OderFilePath); //add to database
             printOderList();
             Console.WriteLine("<---- Back");
             Console.ReadLine();
         }
-        public void printOderList(){
-            Console.WriteLine("Danh sach oder : ");
-            List<Oder> oders = Database<Oder>.readFile(Database<Oder>.OderFilePath);
-            var list = oders.Where(o => o.BillID == this.BillID);
-            Database<Oder>.Table(list);
+        public bool addOderToDatabase(){
+            try { 
+                Database<Oder>.writeFile(this.oders, Database<Oder>.OderFilePath); //add to database
+                return true;
+            }
+            catch (Exception error)
+            {
+                return false;
+            }
         }
         public bool deleteOder()
         {
-            List<Oder> oders = Database<Oder>.readFile(Database<Oder>.OderFilePath);
             List<Product> products = Database<Product>.readFile(Database<Product>.ProductFilePath);
             //--Check id sp
             int id;
@@ -79,14 +82,18 @@ namespace MilkTeaStore
             };
 
             oders.RemoveAll(x => x.ProductID == id);
-            
-            Database<Oder>.writeFile(oders, Database<Oder>.OderFilePath); //add to database
-            
+
             printOderList();
             Console.WriteLine("<---- Back");
             Console.ReadLine();
 
             return true;
+        }
+        public void printOderList()
+        {
+            Console.WriteLine("Danh sach oder : ");
+            var listoder = oders.Where(o => o.BillID == this.BillID);
+            Database<Oder>.Table(listoder);
         }
     }
 
