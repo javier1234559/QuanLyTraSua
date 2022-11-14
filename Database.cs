@@ -76,9 +76,8 @@ namespace MilkTeaStore
             };
             var DiscountList = new List<Discount>
             {
-                new Discount(1,0.2f,"Giam gia giang sinh"),
-                new Discount(2,0.2f,"Giam gia sinh nhat"),
-                new Discount(3,0.2f,"Giam gia mua 10 ly"),
+                new Discount(1,"25/12",0.5,"Giam gia giang sinh"),
+                new Discount(2,"15/11",0.2,"Giam gia sinh nhat"),
             };
             var IngredientList = new List<Ingredient> {
                 new Ingredient("ingre1","Sugar",3000,"Cat Linh"),
@@ -86,10 +85,9 @@ namespace MilkTeaStore
                 new Ingredient("ingre3","Sugar",200,"Cat Linh")
             };
             var BillList = new List<Bill> {
-                new Bill(1,1,1,"20/10/2002","discount1",20000),
-                new Bill(2,1,1,"20/10/2002","discount1",20000),
-                new Bill(3,1,1,"20/10/2002","discount1",20000),
-                new Bill(4,1,1,"20/10/2002","discount1",20000),
+                new Bill(1,1,1,"20/10/2002",1,20000),
+                new Bill(2,1,1,"20/10/2002",1,20000),
+                new Bill(3,1,1,"20/10/2002",1,20000),
             };
 
             /*var oders = new List<Oder> {

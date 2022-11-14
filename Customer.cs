@@ -33,7 +33,6 @@ namespace MilkTeaStore
             Database<Bill>.Table(query);
             Console.WriteLine("<------ Back");
             Console.ReadLine();
-            Menu.CustomerMenu();
 
         }
         public void CreateNewOder()
@@ -64,7 +63,6 @@ namespace MilkTeaStore
             Database<Customer>.writeFile(customers, Database<Customer>.CustomerFilePath); //add to database
             Console.Write("Tiep tuc oder ---> ");
             Console.ReadLine();//Stop screen
-            Menu.OderMenu();
         }
         public void CreateNewOderMenu() // khong biet co nen bo o Customer ko
         {

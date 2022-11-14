@@ -5,8 +5,8 @@
         public int CusID { get; set; }
         public int StaffID { get; set; }
         public string Date;
-        public string DiscountID { get; set; }
-        public long Total { get; set; }
+        public int DiscountID { get; set; }
+        public double Total { get; set; }
         public List<Bill> bills { get; set; }
 
         public Bill()
@@ -17,7 +17,15 @@
         {
             BillID = billId;
         }
-        public Bill(int billId, int cusID, int staffID, string date, string discountID, long total)
+        public Bill(int cusID, int staffID, string date, int DiscountID)
+        {
+            CusID = cusID;
+            StaffID = staffID;
+            Date = date;
+            this.DiscountID = DiscountID;
+        }
+
+        public Bill(int billId, int cusID, int staffID, string date, int discountID, double total)
         {
             BillID = billId;
             CusID = cusID;
@@ -26,10 +34,45 @@
             DiscountID = discountID;
             Total = total;
         }
+        public void addBill()
+        {
+            bills = Database<Bill>.readFile(Database<Bill>.BillFilePath);
+
+            this.BillID = bills.Any() ? bills.Max(x => x.BillID) + 1 : 1; // tang id cua Bill len 1
+            this.Total = this.TotalBill();
+            bills.Add(new Bill(this.BillID,this.CusID,this.StaffID,this.Date,this.DiscountID,this.Total));
+
+            printBill();
+            Console.WriteLine("\n1.Bam bat ki de xuat Hoa Don ");
+            Console.WriteLine("2.Bam 2 de huy Hoa Don ");
+            string check = Console.ReadLine();
+            if(check == "2") {
+                Menu.statusMenu = false;
+            }
+            else
+            {
+                this.addBillToDataBase();
+                Console.Clear();
+                printBill();
+                Console.WriteLine("Cam on quy khach !");
+            }
+            
+        }
+        public bool addBillToDataBase()
+        {
+            try
+            {
+                Database<Bill>.writeFile(bills, Database<Bill>.BillFilePath); //add to database
+                return true;
+            }
+            catch (Exception error)
+            {
+                return false;
+            }
+        }
         public void printBill()
         {
             Console.WriteLine("Danh sach bill : ");
-            this.bills = Database<Bill>.readFile(Database<Bill>.BillFilePath);
             var list = bills.Where(o => o.BillID == this.BillID);
             Database<Bill>.Table(list);
         }
@@ -53,9 +96,10 @@
             Database<Oder>.writeFile(oders, Database<Oder>.OderFilePath); //add to database
             return true;
         }
-        public long TotalBill()
+        public double TotalBill()
         {
-            long sum = 0;
+            double sum = 0;
+            List<Discount> discounts = Database<Discount>.readFile(Database<Discount>.DiscountFilePath);
             List<Oder> oders = Database<Oder>.readFile(Database<Oder>.OderFilePath);
             List<Product> products = Database<Product>.readFile(Database<Product>.ProductFilePath);
             var list = from o in oders
@@ -68,6 +112,11 @@
             foreach (var o in list) {
                 sum += o.price * o.quantity;
             }
+            var discountvalue = discounts.Where(d => d.DiscountID == this.DiscountID);
+            
+            double percentdiscount = discountvalue.FirstOrDefault() == null ? 0 : discountvalue.FirstOrDefault().percentDiscount;
+
+            sum = percentdiscount * sum;
             return sum;
         }
         // void xulyngaydathang()
