@@ -119,6 +119,5 @@
             sum = percentdiscount * sum;
             return sum;
         }
-        // void xulyngaydathang()
     }
 }

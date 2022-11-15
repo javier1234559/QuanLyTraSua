@@ -10,25 +10,44 @@ using System.ComponentModel;
 using System.Xml.Linq;
 using System.Collections;
 using static System.Net.Mime.MediaTypeNames;
+using ConsoleTables;
+using System.Data;
+using System.Threading;
+using DataRow = System.Data.DataRow;
 
 namespace MilkTeaStore
 {
-    class kqquery{
-
-
+    public static class Table
+    {
     }
     class Program
     {
+        
         static void Main(string[] args)
         {
-            Database<Bill>.CreateDatabase();
+            //Database<Bill>.CreateDatabase();
             Menu menu = new Menu();
             while (Menu.statusMenu)
             {
                 menu.WelcomeMenu();
             }
+            /*List<Customer> customers = Database<Customer>.readFile(Database<Customer>.CustomerFilePath);
+            DataTable data = Table.ToDataTable(customers);
 
+            string[] columnNames = data.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToArray();
+            DataRow[] rows = data.Select();
+
+            var table = new ConsoleTable(columnNames);
+
+            foreach(DataRow row in rows)
+            {
+                table.AddRow(row.ItemArray);
+            }
+            table.Write(Format.Alternative);
+            Console.Read();*/
         }
+
+        
     }
 
 }

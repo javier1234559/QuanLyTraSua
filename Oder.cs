@@ -39,15 +39,15 @@ namespace MilkTeaStore
                         break;
                     Console.WriteLine("Ma san pham khong hop le vui long nhap lai ! ");
                 };
-                Console.Write("Nhap so luong va bam c sau do de hoan tat: ");
+                Console.Write("Nhap so luong : ");
                 this.ProductQuantity = Int32.Parse(Console.ReadLine());
 
                 //--Add oder to oders 
                 this.BillID = bills.Any() ? bills.Max(x => x.BillID) + 1 : 1; // tang id cua Bill len 1
                 oders.Add(new Oder(this.BillID, this.ProductID, this.ProductQuantity));
-                Console.Write("----------------");
+                Console.Write("Them 1 oder nua ? (y/n)");
                 string c = Console.ReadLine();
-                if (c == "c") break;
+                if (c == "n") break;
             }
 
             printOderList();

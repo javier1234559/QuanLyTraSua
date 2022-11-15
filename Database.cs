@@ -1,14 +1,18 @@
-﻿using LINQtoCSV;
+﻿using ConsoleTables;
+using LINQtoCSV;
 using System.ComponentModel;
+using System.Data;
 using System.Linq;
+using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using System.Xml.Linq;
+using DataRow = System.Data.DataRow;
 
 namespace MilkTeaStore
 {
     //Generic
-    public class Database<T> where T : class ,new()
+    public  class Database<T> where T : class ,new()
     {
         public static string DiscountFilePath { get; set; } = "DataBase//dicount.csv";
         public static string CustomerFilePath { get; set; } = "DataBase//customer.csv";
@@ -18,11 +22,7 @@ namespace MilkTeaStore
         public static string ProductFilePath { get; set; } = "DataBase//product.csv";
         public static string SupplyFilePath { get; set; } = "DataBase//supply.csv";
         public static string IngredientFilePath { get; set; } = "DataBase//ingredient.csv";
-
-        public Database()
-        {
-               
-        }
+       
         public static void writeFile(List<T> listobjects, string filepath)
         {
             var csvFileConfig = new CsvFileDescription
@@ -35,7 +35,6 @@ namespace MilkTeaStore
             ProductFilePath = filepath;
             csvContext.Write(listobjects, ProductFilePath, csvFileConfig);
         }
-
         public static List<T> readFile(string filepath)
         { 
             CsvFileDescription inputFileDescription = new CsvFileDescription
@@ -80,14 +79,21 @@ namespace MilkTeaStore
                 new Discount(2,"15/11",0.2,"Giam gia sinh nhat"),
             };
             var IngredientList = new List<Ingredient> {
-                new Ingredient("ingre1","Sugar",3000,"Cat Linh"),
-                new Ingredient("ingre2","Chan Chau",1000,"Cat Linh"),
-                new Ingredient("ingre3","Sugar",200,"Cat Linh")
+                new Ingredient(1,"Sugar",3000,"Cat Linh"),
+                new Ingredient(2,"Chan Chau",1000,"Cat Linh"),
+                new Ingredient(3,"Sugar",200,"Cat Linh")
             };
             var BillList = new List<Bill> {
                 new Bill(1,1,1,"20/10/2002",1,20000),
                 new Bill(2,1,1,"20/10/2002",1,20000),
                 new Bill(3,1,1,"20/10/2002",1,20000),
+            };
+            var SupplyList = new List<Supply> {
+                new Supply(1,1,"15/11",30),
+                new Supply(1,2,"15/11",30),
+                new Supply(1,3,"15/11",30),
+                new Supply(4,1,"15/11",30),
+                new Supply(7,1,"15/11",30),
             };
 
             /*var oders = new List<Oder> {
@@ -103,13 +109,16 @@ namespace MilkTeaStore
             Database<Discount>.writeFile(DiscountList, Database<T>.DiscountFilePath);
             Database<Bill>.writeFile(BillList, Database<T>.BillFilePath);
             Database<Ingredient>.writeFile(IngredientList, Database<T>.IngredientFilePath);
+            Database<Supply>.writeFile(SupplyList, Database<T>.SupplyFilePath);
             //Database<Oder>.writeFile(oders, Database<Oder>.OderFilePath); //add to database
 
 
         }
         public static void Table(IEnumerable<T> enumerable) {
+            if (!enumerable.Any()) return;
+
             List<T> oblist = enumerable.ToList();
-            var label = oblist[0];
+            /*var label = oblist[0];
             foreach (PropertyDescriptor d in TypeDescriptor.GetProperties(label))
             {
                 string name = d.Name;
@@ -124,7 +133,20 @@ namespace MilkTeaStore
                     Console.Write("|{0,-13}", value);
                 }
             }
-            Console.WriteLine();
+            Console.WriteLine();*/
+
+            DataTable data = TableDraw.ToDataTable(oblist);
+
+            string[] columnNames = data.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToArray();
+            DataRow[] rows = data.Select();
+
+            var table = new ConsoleTable(columnNames);
+
+            foreach (DataRow row in rows)
+            {
+                table.AddRow(row.ItemArray);
+            }
+            table.Write(Format.Alternative);
         }
         public static void QueryTable(IEnumerable<T> enumerable,string[] labels )
         {
@@ -155,6 +177,34 @@ namespace MilkTeaStore
                 Console.WriteLine();
 
             }
+        }
+
+    }
+    public static class TableDraw
+    {
+        public static DataTable ToDataTable<T>(this List<T> items)
+        {
+            var tb = new DataTable(typeof(T).Name);
+
+            PropertyInfo[] props = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+            foreach (var prop in props)
+            {
+                tb.Columns.Add(prop.Name, prop.PropertyType);
+            }
+
+            foreach (var item in items)
+            {
+                var values = new object[props.Length];
+                for (var i = 0; i < props.Length; i++)
+                {
+                    values[i] = props[i].GetValue(item, null);
+                }
+
+                tb.Rows.Add(values);
+            }
+
+            return tb;
         }
 
     }

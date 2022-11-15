@@ -1,9 +1,19 @@
 {
   "version": 2,
-  "dgSpecHash": "lo7aUGbsJR1uakec4s88W26F/2woao9aOgSBRWzDQQGKQThbfClJKCejYuZ87O8DO90bxLuuzkJJ8eCtEgrkvw==",
+  "dgSpecHash": "UqRiloOjsn9yXpxJKf023WxoJ3lWhneBh9Wh+mbCOMicty1iRdVaPv/RfZNEmkYjqCuRR25nxHDmBxd/n397Cg==",
   "success": true,
   "projectFilePath": "C:\\Users\\Admin\\Desktop\\C#\\TeaStorel\\TeaStorel.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Admin\\.nuget\\packages\\consoletables\\2.4.2\\consoletables.2.4.2.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\system.io\\4.3.0\\system.io.4.3.0.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\system.reflection\\4.3.0\\system.reflection.4.3.0.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\system.reflection.primitives\\4.3.0\\system.reflection.primitives.4.3.0.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\system.reflection.typeextensions\\4.3.0\\system.reflection.typeextensions.4.3.0.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\system.runtime\\4.3.0\\system.runtime.4.3.0.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\system.text.encoding\\4.3.0\\system.text.encoding.4.3.0.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\system.threading.tasks\\4.3.0\\system.threading.tasks.4.3.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\threenine.linqtocsv\\1.6.0\\threenine.linqtocsv.1.6.0.nupkg.sha512"
   ],
   "logs": []

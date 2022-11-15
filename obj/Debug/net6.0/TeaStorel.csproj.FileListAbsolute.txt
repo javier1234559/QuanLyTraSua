@@ -15,3 +15,4 @@ C:\Users\Admin\Desktop\C#\TeaStorel\obj\Debug\net6.0\TeaStorel.genruntimeconfig.
 C:\Users\Admin\Desktop\C#\TeaStorel\obj\Debug\net6.0\ref\TeaStorel.dll
 C:\Users\Admin\Desktop\C#\TeaStorel\bin\Debug\net6.0\LINQtoCSV.dll
 C:\Users\Admin\Desktop\C#\TeaStorel\obj\Debug\net6.0\TeaStorel.csproj.CopyComplete
+C:\Users\Admin\Desktop\C#\TeaStorel\bin\Debug\net6.0\ConsoleTables.dll
