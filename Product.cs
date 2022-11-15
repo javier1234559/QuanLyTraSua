@@ -8,7 +8,6 @@ namespace MilkTeaStore
         M,
         L
     }
-
     class Product
     {
         public int ProductID { get; set; }

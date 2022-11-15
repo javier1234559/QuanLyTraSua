@@ -13,6 +13,7 @@ namespace MilkTeaStore
         public Staff staff = new Staff(1, "Ngoc", "1234567", "20/3 duong hang tre", "Fulltime", "NhanVien", 1200,0);
         public Discount discount = new Discount();
         public Bill bill ;
+
         //Thuoc tinh luu tru de thao tac quan ly
         public Product manageProduct = new Product();
         public Staff manageStaff = new Staff();
@@ -22,8 +23,6 @@ namespace MilkTeaStore
         public Discount manageDiscount = new Discount();
         public Ingredient manageIngredient = new Ingredient();
         public Supply manageSupply = new Supply();
-
-
 
         public Menu() { }
         public  bool WelcomeMenu()
@@ -110,16 +109,13 @@ namespace MilkTeaStore
             {
                 Console.Clear();
                 Console.WriteLine(String.Format("{0}", "Danh sach cac thuc uong"));
-                Console.WriteLine(String.Format("{0}", "-----------------------"));
                 //Xuat bang
                 string[] labels = { "ProductID", "Name", "Size", "Price" };
                 Database<Product>.QueryTable(products, labels);
-
                 Console.WriteLine("1.Them Oder");
                 Console.WriteLine("2.Xoa Oder");
                 Console.WriteLine("3.Hoan Tat Oder");
                 Console.WriteLine("4. Exit ");
-                Console.WriteLine();
                 Console.Write("Select an option : ");
                 switch (Console.ReadLine())
                 {
@@ -147,8 +143,6 @@ namespace MilkTeaStore
                         return true;
                 }
             }
-
-
         }
         public bool ManagerMenu() {
             Console.Clear();

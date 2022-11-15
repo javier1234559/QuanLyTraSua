@@ -68,20 +68,20 @@ namespace MilkTeaStore
         {
             List<Product> products = Database<Product>.readFile(Database<Product>.ProductFilePath);
             //--Check id sp
-            int id;
             while (true)
             {
                 Console.Write("Nhap id san pham muon xoa :");
-                id = Int32.Parse(Console.ReadLine());
+                this.ProductID = Int32.Parse(Console.ReadLine());
+                if (oders == null) return false;
                 var list = from o in oders
-                           where o.ProductID == id
+                           where o.ProductID == this.ProductID
                            select o;
-                if (list.Any(oder => oder.ProductID == id))
+                if (list.Any(oder => oder.ProductID == this.ProductID))
                     break;
                 Console.WriteLine("Ma san pham khong hop le vui long nhap lai ! ");
             };
 
-            oders.RemoveAll(x => x.ProductID == id);
+            oders.RemoveAll(x => x.ProductID == this.ProductID);
 
             printOderList();
             Console.WriteLine("<---- Back");
@@ -92,8 +92,11 @@ namespace MilkTeaStore
         public void printOderList()
         {
             Console.WriteLine("Danh sach oder : ");
-            var listoder = oders.Where(o => o.BillID == this.BillID);
-            Database<Oder>.Table(listoder);
+            if (oders != null)
+            {
+                var listoder = oders.Where(o => o.BillID == this.BillID);
+                Database<Oder>.Table(listoder);
+            }
         }
     }
 

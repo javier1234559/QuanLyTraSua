@@ -118,22 +118,6 @@ namespace MilkTeaStore
             if (!enumerable.Any()) return;
 
             List<T> oblist = enumerable.ToList();
-            /*var label = oblist[0];
-            foreach (PropertyDescriptor d in TypeDescriptor.GetProperties(label))
-            {
-                string name = d.Name;
-                Console.Write("{0,-14}", name);
-            }
-            foreach (var o in oblist) {
-               
-                Console.WriteLine();
-                foreach (PropertyDescriptor d in TypeDescriptor.GetProperties(o))
-                {
-                    object value = d.GetValue(o);
-                    Console.Write("|{0,-13}", value);
-                }
-            }
-            Console.WriteLine();*/
 
             DataTable data = TableDraw.ToDataTable(oblist);
 
@@ -148,37 +132,39 @@ namespace MilkTeaStore
             }
             table.Write(Format.Alternative);
         }
-        public static void QueryTable(IEnumerable<T> enumerable,string[] labels )
+        public static void QueryTable(IEnumerable<T> enumerable,string[] props )
         {
-            List<T> oblist = enumerable.ToList();
-            foreach(string label in labels)
+            List<T> oblist = enumerable.ToList(); // convert to List<string>
+
+            DataTable data = TableDraw.ToDataTable(oblist);
+
+            var tb = new DataTable(typeof(T).Name);
+            foreach (var prop in props)
             {
-                Console.Write("{0,-14}", label);
+                tb.Columns.Add(prop, typeof(string));
             }
-            Console.WriteLine();
-            foreach (var o in oblist)
+            foreach (var item in oblist)
             {
-                string name ="";
-                int labelIndex = 0;
-                foreach (PropertyDescriptor d in TypeDescriptor.GetProperties(o))
+                var values = new object[props.Length];
+                for (var i = 0; i < props.Length; i++)
                 {
-                    name = d.Name;
-                    for(int i = labelIndex; i < labels.Length;i++)
-                    {
-                        if(name == labels[i])
-                        {
-                            object value = d.GetValue(o);
-                            Console.Write("|{0,-13}", value);
-                        }
-                        labelIndex++;
-                        break;
-                    }
+                    values[i] = TableDraw.GetPropValue(item, props[i]);
                 }
-                Console.WriteLine();
-
+                tb.Rows.Add(values);
             }
-        }
 
+            string[] columnNames = tb.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToArray();
+            DataRow[] rows = tb.Select();
+            var table = new ConsoleTable(props);
+
+            foreach (DataRow row in rows)
+            {
+                table.AddRow(row.ItemArray);
+            }
+            table.Write(Format.Alternative);
+
+        }
+        
     }
     public static class TableDraw
     {
@@ -206,6 +192,9 @@ namespace MilkTeaStore
 
             return tb;
         }
-
+        public static object GetPropValue(object src, string propName)
+        {
+            return src.GetType().GetProperty(propName).GetValue(src, null);
+        }
     }
 }
