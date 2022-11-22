@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace MilkTeaStore
+namespace TeaStorel
 {
     class Person
     {

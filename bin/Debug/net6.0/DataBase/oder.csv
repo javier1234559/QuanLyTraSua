@@ -1,1 +1,5 @@
-﻿OderID,BillID,ProductID,ProductQuantity,oders
+﻿BillID,ProductID,ProductQuantity
+1,5,2
+4,2,10
+5,1,2
+5,1,2

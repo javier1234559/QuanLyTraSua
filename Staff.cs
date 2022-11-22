@@ -1,4 +1,4 @@
-﻿namespace MilkTeaStore
+﻿namespace TeaStorel
 {
     class Staff : Person
     {
@@ -8,7 +8,7 @@
         public long Salary { get; set; }
         public int AbsentDay { get; set; } = 0;
 
-        private List<Staff> staffs { get; set; }
+        
         public Staff()
         {
             
@@ -21,15 +21,57 @@
             this.WorkSchedule = WorkSchedule;
             this.AbsentDay = absentday;
         }
+
+        //Login Nhan vien
+        public void loginMenu()
+        {
+            Console.Clear();
+            Console.WriteLine(String.Format("{0}{1,-55}", "", "Nhan thong tin dang nhap"));
+            Console.WriteLine(String.Format("{0}{1,-55}", "", "-----------------------"));
+            Console.WriteLine(String.Format("{0}{1,-15}", "1.", this.Name == null ? "Nhap ten khach hang" : String.Format("Ten nhan vien:{0,11}{1,2}", "|", Name)));
+            Console.WriteLine(String.Format("{0}{1,-15}", "2.", this.Numberphone == null ? "Nhap so dien thoai" : String.Format("So dien thoai:{0,12}{1,2}", "|", Numberphone)));
+            Console.WriteLine("---------------------");
+        }
+
+        public bool checkAndLogin()
+        {
+            List<Staff> staffs = Database<Staff>.readFile(Database<Staff>.StaffFilePath);
+            try {
+                var query = from o in staffs
+                            where o.Numberphone == this.Numberphone && o.Name == this.Name
+                            select o;
+
+                var e = query.First();
+                this.StaffId = e.StaffId;
+                this.Address = e.Address;
+                this.Position = e.Position;
+                this.Salary = e.Salary;
+                this.WorkSchedule = e.WorkSchedule;
+                this.AbsentDay = e.AbsentDay;
+
+                return true;
+            }
+            catch {
+                return false;
+            }
+        }
+
+
+
+
+
+
+
+        //Quan Ly
         public void printStaff()
         {
-            staffs = Database<Staff>.readFile(Database<Staff>.StaffFilePath);
-            var list = staffs.Where(o => o.StaffId == this.StaffId);
-            Database<Staff>.Table(staffs);
+            CacheData.staffs = Database<Staff>.readFile(Database<Staff>.StaffFilePath);
+            var list = CacheData.staffs.Where(o => o.StaffId == this.StaffId);
+            Database<Staff>.Table(CacheData.staffs);
         }
         public void addManageStaff()
         {
-            this.staffs = Database<Staff>.readFile(Database<Staff>.StaffFilePath);
+            CacheData.staffs = Database<Staff>.readFile(Database<Staff>.StaffFilePath);
             //--Check add Staff
             Console.WriteLine("Nhap ten nhan vien de them :");
             this.Name = Console.ReadLine();
@@ -46,26 +88,26 @@
             Console.WriteLine("Nhap muc luong de them :");
             this.Salary = Int32.Parse(Console.ReadLine());
 
-            this.StaffId = staffs.Any() ? staffs.Max(x => x.StaffId) + 1 : 1; // tang id cua Staff len 1
+            this.StaffId = CacheData.staffs.Any() ? CacheData.staffs.Max(x => x.StaffId) + 1 : 1; // tang id cua Staff len 1
 
             //--Add Staff to Staffs
-            staffs.Add(this);
+            CacheData.staffs.Add(this);
 
             Console.WriteLine("Them thanh cong !");
-            Database<Staff>.Table(staffs);
+            Database<Staff>.Table(CacheData.staffs);
             Console.WriteLine("<---- Back");
             Console.ReadLine();
         }
         public bool deleteManageStaff()
         {
             //--Check id sp
-            this.staffs = Database<Staff>.readFile(Database<Staff>.StaffFilePath);
+            CacheData.staffs = Database<Staff>.readFile(Database<Staff>.StaffFilePath);
             int id;
             while (true)
             {
                 Console.Write("Nhap id nhan vien muon xoa :");
                 id = Int32.Parse(Console.ReadLine());
-                var list = from o in staffs
+                var list = from o in CacheData.staffs
                            where o.StaffId == id
                            select o;
                 if (list.Any(oder => oder.StaffId == id))
@@ -73,31 +115,31 @@
                 Console.WriteLine("Ma nhan vien khong hop le vui long nhap lai ! ");
             };
 
-            staffs.RemoveAll(x => x.StaffId == id);
+            CacheData.staffs.RemoveAll(x => x.StaffId == id);
 
             Console.WriteLine("Xoa thanh cong !");
-            Database<Staff>.Table(staffs);
+            Database<Staff>.Table(CacheData.staffs);
             Console.WriteLine("<---- Back");
             Console.ReadLine();
             return true;
         }
         public bool editManageStaff()
         {
-            this.staffs = Database<Staff>.readFile(Database<Staff>.StaffFilePath);
+            CacheData.staffs = Database<Staff>.readFile(Database<Staff>.StaffFilePath);
             //--Check id sp
             int id;
             while (true)
             {
                 Console.Write("Nhap id nhan vien muon sua :");
                 id = Int32.Parse(Console.ReadLine());
-                var list = from o in staffs
+                var list = from o in CacheData.staffs
                            where o.StaffId == id
                            select o;
                 if (list.Any(oder => oder.StaffId == id))
                     break;
                 Console.WriteLine("Ma nhan vien khong hop le vui long nhap lai ! ");
             };
-            staffs.RemoveAll(x => x.StaffId == id);
+            CacheData.staffs.RemoveAll(x => x.StaffId == id);
 
             this.StaffId = id;
             //--Check add Staff
@@ -117,10 +159,10 @@
             this.Salary = Int32.Parse(Console.ReadLine());
 
             //--Add Staff to Staffs
-            this.staffs.Add(this);
+            CacheData.staffs.Add(this);
 
             Console.WriteLine("Sua thanh cong !");
-            Database<Staff>.Table(this.staffs);
+            Database<Staff>.Table(CacheData.staffs);
             Console.WriteLine("<---- Back");
             Console.ReadLine();
 
@@ -130,7 +172,7 @@
         {
             try
             {
-                var enumerable = from o in this.staffs
+                var enumerable = from o in CacheData.staffs
                                  orderby o.StaffId descending
                                  select o;
                 List<Staff> oderByList = enumerable.ToList();

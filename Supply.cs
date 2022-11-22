@@ -1,4 +1,4 @@
-﻿namespace MilkTeaStore
+﻿namespace TeaStorel
 {
     class Supply
     {

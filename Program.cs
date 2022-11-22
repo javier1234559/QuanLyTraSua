@@ -9,13 +9,12 @@ using System.Reflection;
 using System.ComponentModel;
 using System.Xml.Linq;
 using System.Collections;
-using static System.Net.Mime.MediaTypeNames;
 using ConsoleTables;
 using System.Data;
 using System.Threading;
 using DataRow = System.Data.DataRow;
 
-namespace MilkTeaStore
+namespace TeaStorel
 {
     public static class Table
     {
@@ -25,7 +24,7 @@ namespace MilkTeaStore
         
         static void Main(string[] args)
         {
-           // Database<Bill>.CreateDatabase(); //tao san Database
+           //Database<Bill>.CreateDatabase(); //tao san Database
             Menu menu = new Menu();
             while (Menu.statusMenu)
             {

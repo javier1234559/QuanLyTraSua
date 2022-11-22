@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 using DataRow = System.Data.DataRow;
 
-namespace MilkTeaStore
+namespace TeaStorel
 {
     //Generic
     public  class Database<T> where T : class ,new()
@@ -96,6 +96,10 @@ namespace MilkTeaStore
                 new Supply(7,1,"15/11",30),
             };
 
+            var oders = new List<Oder>
+            {
+                new Oder(1,5,2)
+            };
             
             Database<Customer>.writeFile(customerList, Database<T>.CustomerFilePath);
             Database<Product>.writeFile(ProductList, Database<T>.ProductFilePath);
@@ -104,7 +108,7 @@ namespace MilkTeaStore
             Database<Bill>.writeFile(BillList, Database<T>.BillFilePath);
             Database<Ingredient>.writeFile(IngredientList, Database<T>.IngredientFilePath);
             Database<Supply>.writeFile(SupplyList, Database<T>.SupplyFilePath);
-            //Database<Oder>.writeFile(oders, Database<Oder>.OderFilePath); //add to database
+            Database<Oder>.writeFile(oders, Database<Oder>.OderFilePath); //add to database
 
 
         }

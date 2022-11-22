@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MilkTeaStore
+namespace TeaStorel
 {
     public enum SIZE
     {
@@ -18,7 +18,7 @@ namespace MilkTeaStore
         public int bestSeller { get; set; }
         public float rate { get; set; }
         public int quantityInStock { get; set; }
-        private List<Product> products { get; set; }
+        
         public Product()
         {
 
@@ -54,9 +54,11 @@ namespace MilkTeaStore
             // Kiem tra trong file sl da dat nhieu nhat
             return this.bestSeller;
         }
+        
+        //Quan Ly
         public void addManageProduct()
         {
-            this.products = Database<Product>.readFile(Database<Product>.ProductFilePath);
+            CacheData.products = Database<Product>.readFile(Database<Product>.ProductFilePath);
             //--Check add product
             Console.WriteLine("Nhap ten san pham de them :");
             this.Name = Console.ReadLine();
@@ -76,25 +78,25 @@ namespace MilkTeaStore
             Console.WriteLine("Nhap so luong san pham muon ton kho :");
             this.quantityInStock = Int32.Parse(Console.ReadLine());
 
-            this.ProductID = products.Any() ? products.Max(x => x.ProductID) + 1 : 1; // tang id cua product len 1
+            this.ProductID = CacheData.products.Any() ? CacheData.products.Max(x => x.ProductID) + 1 : 1; // tang id cua product len 1
 
-            //--Add product to products
-            products.Add(new Product(ProductID,Name,this.Size,this.Price,this.OriginalPrice,this.quantityInStock));
+            //--Add product to CacheData.products
+            CacheData.products.Add(new Product(ProductID,Name,this.Size,this.Price,this.OriginalPrice,this.quantityInStock));
             
             Console.WriteLine("Them thanh cong !");
-            Database<Product>.Table(products);
+            Database<Product>.Table(CacheData.products);
             Console.WriteLine("<---- Back");
             Console.ReadLine();
         }
         public bool deleteManageProduct()
         {
             //--Check id sp
-            this.products = Database<Product>.readFile(Database<Product>.ProductFilePath);
+            CacheData.products = Database<Product>.readFile(Database<Product>.ProductFilePath);
             int id;
             while (true) { 
                 Console.Write("Nhap id san pham muon xoa :");
                 id = Int32.Parse(Console.ReadLine());
-                var list = from o in products
+                var list = from o in CacheData.products
                            where o.ProductID == id
                            select o;
                 if (list.Any(oder => oder.ProductID == id))
@@ -102,31 +104,31 @@ namespace MilkTeaStore
                 Console.WriteLine("Ma san pham khong hop le vui long nhap lai ! ");
             };
 
-            products.RemoveAll(x => x.ProductID == id);
+            CacheData.products.RemoveAll(x => x.ProductID == id);
 
             Console.WriteLine("Xoa thanh cong !");
-            Database<Product>.Table(products);
+            Database<Product>.Table(CacheData.products);
             Console.WriteLine("<---- Back");
             Console.ReadLine();
             return true;
         }
         public bool editManageProduct()
         {
-            this.products = Database<Product>.readFile(Database<Product>.ProductFilePath);
+            CacheData.products = Database<Product>.readFile(Database<Product>.ProductFilePath);
             //--Check id sp
             int id;
             while (true)
             {
                 Console.Write("Nhap id san pham muon sua :");
                 id = Int32.Parse(Console.ReadLine());
-                var list = from o in products
+                var list = from o in CacheData.products
                            where o.ProductID == id
                            select o;
                 if (list.Any(oder => oder.ProductID == id))
                     break;
                 Console.WriteLine("Ma san pham khong hop le vui long nhap lai ! ");
             };
-            products.RemoveAll(x => x.ProductID == id);
+            CacheData.products.RemoveAll(x => x.ProductID == id);
             this.ProductID = id;
             //--Check add product
             Console.WriteLine("Nhap ten san pham de sua :");
@@ -150,11 +152,11 @@ namespace MilkTeaStore
             this.quantityInStock = Int32.Parse(Console.ReadLine());
 
             
-            //--Add product to products
-            this.products.Add(new Product(this.ProductID, this.Name, kichthuoc, this.Price, this.OriginalPrice, this.quantityInStock));
+            //--Add product to CacheData.products
+            CacheData.products.Add(new Product(this.ProductID, this.Name, kichthuoc, this.Price, this.OriginalPrice, this.quantityInStock));
 
             Console.WriteLine("Sua thanh cong !");
-            Database<Product>.Table(this.products);
+            Database<Product>.Table(CacheData.products);
             Console.WriteLine("<---- Back");
             Console.ReadLine();
 
@@ -164,7 +166,7 @@ namespace MilkTeaStore
         {
             try
             {
-                var enumerable = from o in this.products
+                var enumerable = from o in CacheData.products
                                  orderby o.ProductID descending
                                  select o;
                 List<Product> oderByList = enumerable.ToList();

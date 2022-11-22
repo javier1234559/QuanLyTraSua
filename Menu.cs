@@ -1,7 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Runtime.ConstrainedExecution;
 
-namespace MilkTeaStore
+namespace TeaStorel
 {
     class Menu
     {
@@ -10,7 +10,7 @@ namespace MilkTeaStore
         //Thuoc tinh luu tru de thao tac Oder
         public Customer cus ;
         public Oder oder;
-        public Staff staff = new Staff(1, "Ngoc", "1234567", "20/3 duong hang tre", "Fulltime", "NhanVien", 1200,0);
+        public Staff staff = new Staff();
         public Discount discount = new Discount();
         public Bill bill ;
 
@@ -46,12 +46,11 @@ namespace MilkTeaStore
             switch (Console.ReadLine())
             {
                 case "1":
-                    CustomerMenu();
+                    this.cus = new Customer();
+                    CreateNewCustomer();
                     return true;
                 case "2":
-                    //NhanvienMenu()
-                    Console.WriteLine("Chua hoan tat !");
-                    Console.ReadLine();
+                    LoginNhanVien();
                     return true;
                 case "3":
                     ManagerMenu();
@@ -66,32 +65,103 @@ namespace MilkTeaStore
             }
         
         }
-        
-        //Khach Hang
-        public  bool CustomerMenu()
+        //Nhan Vien
+        public void LoginNhanVien()
+        {
+            staff.loginMenu();
+
+            while (true) { 
+
+                Console.Write("Ten nhan vien : ");
+                staff.Name = Console.ReadLine();
+                staff.loginMenu();
+                Console.Write("So dien thoai : ");
+                staff.Numberphone = Console.ReadLine();
+                staff.loginMenu();
+
+                if (staff.checkAndLogin()) break;
+
+                Console.WriteLine("Ten hoac so dien thoai khong dung !");
+                Console.WriteLine("Thoat ? (y/n)");
+                string s = Console.ReadLine();
+                if (s == "y") break;
+            }
+            Console.WriteLine("Dang Nhap thanh cong ! " );
+            Console.WriteLine("------> Next");
+            Console.ReadLine();
+            StaffMenu();
+        }
+        public bool StaffMenu()
         {
             Console.Clear();
-            string title = "Khach Hang";
-            string[] listoption = {"Dat Hang", "Lich Su Hoa Don","Quay Lai","Thoat"};
+            string title = "Xin chao nhan vien  " + this.staff.Name;
+            string[] listoption = { "Xem thong tin ", "Xem lich su oder ", "Quay Lai", "Thoat" };
             printOptionConsole(title, listoption);
 
             switch (Console.ReadLine())
             {
                 case "1":
-                    this.cus = new Customer();
-                    this.cus.CreateNewOder();
-                    this.OderMenu();
+                    //OderMenu();
                     return true;
                 case "2":
-                    string name, numberphone;
-                    Console.WriteLine("Vui long nhap ten va so dien thoai lan dat truoc: ");
-                    Console.Write("Ten khach hang : ");
-                    name = Console.ReadLine();
-                    Console.Write("So dien thoai : ");
-                    numberphone = Console.ReadLine();
+                    //HistoryOderStaff();
+                    return true;
+                case "3":
+                    WelcomeMenu();
+                    return true;
+                case "4":
+                    Console.Clear();
+                    Console.WriteLine("Ket Thuc Chuong Trinh !");
+                    statusMenu = false;
+                    return false;
+                default:
+                    return true;
+            }
+        }
 
-                    this.cus = new Customer(name, numberphone);
+        //Khach Hang
+
+        public void CreateNewCustomer()
+        {
+            //Get data from database
+            List<Customer> customers = Database<Customer>.readFile(Database<Customer>.CustomerFilePath);
+
+            this.cus.CreateNewOderMenu();
+            Console.Write("Ten khach hang : ");
+            this.cus.Name = Console.ReadLine();
+            this.cus.CreateNewOderMenu();
+            Console.Write("So dien thoai : ");
+            this.cus.Numberphone = Console.ReadLine();
+            this.cus.CreateNewOderMenu();
+            Console.Write("Dia chi dat hang : ");
+            this.cus.Address = Console.ReadLine();
+            this.cus.CreateNewOderMenu();
+
+            this.cus.CusId = customers.Any() ? customers.Max(x => x.CusId) + 1 : 1; // tang id cua Bill len 1
+            customers.Add(this.cus);
+
+
+            //Them vao database
+            Database<Customer>.writeFile(customers, Database<Customer>.CustomerFilePath); //add to database
+            Console.Write("Tiep tuc oder ---> ");
+            Console.ReadLine();//Stop screen
+            CustomerMenu();
+        }
+        public bool CustomerMenu()
+        {
+            Console.Clear();
+            string title = "Xin chao khach hang " + this.cus.Name;
+            string[] listoption = { "Dat Hang", "Lich Su Hoa Don", "Quay Lai", "Thoat" };
+            printOptionConsole(title, listoption);
+
+            switch (Console.ReadLine())
+            {
+                case "1":
+                    OderMenu();
+                    return true;
+                case "2":
                     cus.HistoryBuying();
+                    CustomerMenu();
                     return true;
                 case "3":
                     WelcomeMenu();
@@ -136,10 +206,19 @@ namespace MilkTeaStore
                     case "3":
                         oder.addOderToDatabase();
                         Console.Write("Hay nhap ngay hom nay de biet giam gia (vd: 25/12): ");
-                        string date = Console.ReadLine(); 
-                        this.discount.DiscountID = discount.CheckDiscount(date);
-                        this.bill = new Bill(cus.CusId, staff.StaffId, date,this.discount.DiscountID);
-                        bill.addBill();
+                        string date = Console.ReadLine();
+                        Console.WriteLine("Nhap ma nhan vien neu co (y/n)");
+                        string ma = Console.ReadLine();
+                        if( ma == "y"){
+                            int staffOderId = Int32.Parse(Console.ReadLine());
+                            this.discount.DiscountID = discount.CheckDiscount(date);
+                            this.bill = new Bill(cus.CusId, staffOderId, date,this.discount.DiscountID);
+                            bill.addBill();
+                        }
+                        else {
+                            this.bill = new Bill(cus.CusId, date, this.discount.DiscountID);
+                            bill.addBill();
+                        }
                         break;
                     case "4":
                         CustomerMenu();

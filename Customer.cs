@@ -2,13 +2,13 @@
 using System.Net;
 using System.Runtime.CompilerServices;
 using System.Xml.Linq;
+using TeaStorel;
 
-namespace MilkTeaStore
+namespace TeaStorel
 {
     class Customer:Person
     {
         public  int CusId { get; set; }
-        private List<Customer> customers;
         public Customer()
         {
            
@@ -37,35 +37,7 @@ namespace MilkTeaStore
             Console.ReadLine();
 
         }
-        public void CreateNewOder()
-        {
-            //Get data from database
-            List<Customer> customers = Database<Customer>.readFile(Database<Customer>.CustomerFilePath);
-            
-            CreateNewOderMenu();
-            Console.Write("Ten khach hang : ");
-            this.Name = Console.ReadLine();
-            CreateNewOderMenu();
-            Console.Write("So dien thoai : ");
-            this.Numberphone = Console.ReadLine();
-            CreateNewOderMenu();
-            Console.Write("Dia chi dat hang : ");
-            this.Address = Console.ReadLine();
-            CreateNewOderMenu();
-
-            this.CusId = customers.Any() ? customers.Max(x => x.CusId) + 1 : 1; // tang id cua Bill len 1
-            customers.Add(this);
-
-            //Debug
-            foreach(var cus in customers)
-            {
-                Console.WriteLine(cus.Name);
-            }
-            //Them vao database
-            Database<Customer>.writeFile(customers, Database<Customer>.CustomerFilePath); //add to database
-            Console.Write("Tiep tuc oder ---> ");
-            Console.ReadLine();//Stop screen
-        }
+        
         public void CreateNewOderMenu() 
         {
             Console.Clear();
@@ -79,13 +51,13 @@ namespace MilkTeaStore
 
         public void printCustomer()
         {
-            customers = Database<Customer>.readFile(Database<Customer>.CustomerFilePath);
-            var list = customers.Where(o => o.CusId == this.CusId);
-            Database<Customer>.Table(customers);
+            CacheData.customers = Database<Customer>.readFile(Database<Customer>.CustomerFilePath);
+            var list = CacheData.customers.Where(o => o.CusId == this.CusId);
+            Database<Customer>.Table(CacheData.customers);
         }
         public void addManageCustomer()
         {
-            this.customers = Database<Customer>.readFile(Database<Customer>.CustomerFilePath);
+            CacheData.customers = Database<Customer>.readFile(Database<Customer>.CustomerFilePath);
             //--Check add Customer
             Console.WriteLine("Nhap ten khach hang de them :");
             this.Name = Console.ReadLine();
@@ -94,26 +66,26 @@ namespace MilkTeaStore
             Console.WriteLine("Nhap dia chi khach hang de them :");
             this.Address = Console.ReadLine();
 
-            this.CusId = customers.Any() ? customers.Max(x => x.CusId) + 1 : 1; // tang id cua Customer len 1
+            this.CusId = CacheData.customers.Any() ? CacheData.customers.Max(x => x.CusId) + 1 : 1; // tang id cua Customer len 1
 
             //--Add Customer to Customers
-            customers.Add(this);
+            CacheData.customers.Add(this);
 
             Console.WriteLine("Them thanh cong !");
-            Database<Customer>.Table(customers);
+            Database<Customer>.Table(CacheData.customers);
             Console.WriteLine("<---- Back");
             Console.ReadLine();
         }
         public bool deleteManageCustomer()
         {
             //--Check id sp
-            this.customers = Database<Customer>.readFile(Database<Customer>.CustomerFilePath);
+            CacheData.customers = Database<Customer>.readFile(Database<Customer>.CustomerFilePath);
             int id;
             while (true)
             {
                 Console.Write("Nhap id nhan vien muon xoa :");
                 id = Int32.Parse(Console.ReadLine());
-                var list = from o in customers
+                var list = from o in CacheData.customers
                            where o.CusId == id
                            select o;
                 if (list.Any(oder => oder.CusId == id))
@@ -121,31 +93,31 @@ namespace MilkTeaStore
                 Console.WriteLine("Ma nhan vien khong hop le vui long nhap lai ! ");
             };
 
-            customers.RemoveAll(x => x.CusId == id);
+            CacheData.customers.RemoveAll(x => x.CusId == id);
 
             Console.WriteLine("Xoa thanh cong !");
-            Database<Customer>.Table(customers);
+            Database<Customer>.Table(CacheData.customers);
             Console.WriteLine("<---- Back");
             Console.ReadLine();
             return true;
         }
         public bool editManageCustomer()
         {
-            this.customers = Database<Customer>.readFile(Database<Customer>.CustomerFilePath);
+            CacheData.customers = Database<Customer>.readFile(Database<Customer>.CustomerFilePath);
             //--Check id sp
             int id;
             while (true)
             {
                 Console.Write("Nhap id nhan vien muon sua :");
                 id = Int32.Parse(Console.ReadLine());
-                var list = from o in customers
+                var list = from o in CacheData.customers
                            where o.CusId == id
                            select o;
                 if (list.Any(oder => oder.CusId == id))
                     break;
                 Console.WriteLine("Ma nhan vien khong hop le vui long nhap lai ! ");
             };
-            customers.RemoveAll(x => x.CusId == id);
+            CacheData.customers.RemoveAll(x => x.CusId == id);
 
             this.CusId = id;
             //--Check add Customer
@@ -157,10 +129,10 @@ namespace MilkTeaStore
             this.Address = Console.ReadLine();
 
             //--Add Customer to Customers
-            this.customers.Add(this);
+            CacheData.customers.Add(this);
 
             Console.WriteLine("Sua thanh cong !");
-            Database<Customer>.Table(this.customers);
+            Database<Customer>.Table(CacheData.customers);
             Console.WriteLine("<---- Back");
             Console.ReadLine();
 
@@ -170,7 +142,7 @@ namespace MilkTeaStore
         {
             try
             {
-                var enumerable = from o in this.customers
+                var enumerable = from o in CacheData.customers
                                  orderby o.CusId descending
                                  select o;
                 List<Customer> oderByList = enumerable.ToList();

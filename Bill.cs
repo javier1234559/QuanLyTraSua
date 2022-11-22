@@ -1,4 +1,4 @@
-﻿namespace MilkTeaStore
+﻿namespace TeaStorel
 {
     class Bill {
         public int BillID { get; set; }
@@ -7,7 +7,6 @@
         public int DiscountID { get; set; }
         public string Date;
         public double Total { get; set; }
-        private List<Bill> bills { get; set; }
 
         public Bill()
         {
@@ -24,7 +23,12 @@
             Date = date;
             this.DiscountID = DiscountID;
         }
-
+        public Bill(int cusID, string date, int DiscountID)
+        {
+            CusID = cusID;
+            Date = date;
+            this.DiscountID = DiscountID;
+        }
         public Bill(int billId, int cusID, int staffID, string date, int discountID, double total)
         {
             BillID = billId;
@@ -37,11 +41,11 @@
         //Xu ly chuc nang oder
         public void addBill()
         {
-            bills = Database<Bill>.readFile(Database<Bill>.BillFilePath);
+            CacheData.bills = Database<Bill>.readFile(Database<Bill>.BillFilePath);
 
-            this.BillID = bills.Any() ? bills.Max(x => x.BillID) + 1 : 1; // tang id cua Bill len 1
+            this.BillID = CacheData.bills.Any() ? CacheData.bills.Max(x => x.BillID) + 1 : 1; // tang id cua Bill len 1
             this.Total = this.TotalBill();
-            bills.Add(new Bill(this.BillID,this.CusID,this.StaffID,this.Date,this.DiscountID,this.Total));
+            CacheData.bills.Add(this);
 
             printBill();
             Console.WriteLine("\n1.Bam bat ki de xuat Hoa Don ");
@@ -56,6 +60,7 @@
                 Console.Clear();
                 printBill();
                 Console.WriteLine("Cam on quy khach !");
+                Console.ReadLine();
             }
             
         }
@@ -63,7 +68,7 @@
         {
             try
             {
-                Database<Bill>.writeFile(bills, Database<Bill>.BillFilePath); //add to database
+                Database<Bill>.writeFile(CacheData.bills, Database<Bill>.BillFilePath); //add to database
                 return true;
             }
             catch (Exception error)
@@ -74,13 +79,13 @@
         public void printBill()
         {
             Console.WriteLine("Danh sach bill : ");
-            var list = bills.Where(o => o.BillID == this.BillID);
+            var list = CacheData.bills.Where(o => o.BillID == this.BillID);
             Database<Bill>.Table(list);
         }
         public bool deletethisBill()
         {
             List<Oder> oders = Database<Oder>.readFile(Database<Oder>.OderFilePath);
-            this.bills = Database<Bill>.readFile(Database<Bill>.BillFilePath);
+            CacheData.bills = Database<Bill>.readFile(Database<Bill>.BillFilePath);
             //--Check id bill
             while (true)
             {
