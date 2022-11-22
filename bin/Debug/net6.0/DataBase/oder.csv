@@ -1,1 +1,1 @@
-﻿BillID,ProductID,ProductQuantity,oders
+﻿OderID,BillID,ProductID,ProductQuantity,oders

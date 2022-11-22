@@ -4,10 +4,10 @@
         public int BillID { get; set; }
         public int CusID { get; set; }
         public int StaffID { get; set; }
-        public string Date;
         public int DiscountID { get; set; }
+        public string Date;
         public double Total { get; set; }
-        public List<Bill> bills { get; set; }
+        private List<Bill> bills { get; set; }
 
         public Bill()
         {
@@ -34,6 +34,7 @@
             DiscountID = discountID;
             Total = total;
         }
+        //Xu ly chuc nang oder
         public void addBill()
         {
             bills = Database<Bill>.readFile(Database<Bill>.BillFilePath);
@@ -119,5 +120,9 @@
             sum = percentdiscount * sum;
             return sum;
         }
+   
+        
+
+
     }
 }

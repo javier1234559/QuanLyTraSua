@@ -18,7 +18,7 @@ namespace MilkTeaStore
         public int bestSeller { get; set; }
         public float rate { get; set; }
         public int quantityInStock { get; set; }
-        public List<Product> products { get; set; }
+        private List<Product> products { get; set; }
         public Product()
         {
 
@@ -54,7 +54,7 @@ namespace MilkTeaStore
             // Kiem tra trong file sl da dat nhieu nhat
             return this.bestSeller;
         }
-        public void addProduct()
+        public void addManageProduct()
         {
             this.products = Database<Product>.readFile(Database<Product>.ProductFilePath);
             //--Check add product
@@ -86,7 +86,7 @@ namespace MilkTeaStore
             Console.WriteLine("<---- Back");
             Console.ReadLine();
         }
-        public bool deleteProduct()
+        public bool deleteManageProduct()
         {
             //--Check id sp
             this.products = Database<Product>.readFile(Database<Product>.ProductFilePath);
@@ -110,7 +110,7 @@ namespace MilkTeaStore
             Console.ReadLine();
             return true;
         }
-        public bool editProduct()
+        public bool editManageProduct()
         {
             this.products = Database<Product>.readFile(Database<Product>.ProductFilePath);
             //--Check id sp
@@ -127,11 +127,10 @@ namespace MilkTeaStore
                 Console.WriteLine("Ma san pham khong hop le vui long nhap lai ! ");
             };
             products.RemoveAll(x => x.ProductID == id);
-
+            this.ProductID = id;
             //--Check add product
             Console.WriteLine("Nhap ten san pham de sua :");
             this.Name = Console.ReadLine();
-
             Console.WriteLine("Nhap kich thuoc san pham de sua :");// convert to enum
             SIZE kichthuoc;
             string size = Console.ReadLine();
@@ -152,7 +151,7 @@ namespace MilkTeaStore
 
             
             //--Add product to products
-            this.products.Add(new Product(id, this.Name, kichthuoc, this.Price, this.OriginalPrice, this.quantityInStock));
+            this.products.Add(new Product(this.ProductID, this.Name, kichthuoc, this.Price, this.OriginalPrice, this.quantityInStock));
 
             Console.WriteLine("Sua thanh cong !");
             Database<Product>.Table(this.products);
@@ -161,11 +160,15 @@ namespace MilkTeaStore
 
             return true;
         }
-        public bool addProducttoDataBase()
+        public bool addManageProducttoDataBase()
         {
             try
             {
-                Database<Product>.writeFile(this.products, Database<Product>.ProductFilePath); //add to database
+                var enumerable = from o in this.products
+                                 orderby o.ProductID descending
+                                 select o;
+                List<Product> oderByList = enumerable.ToList();
+                Database<Product>.writeFile(oderByList, Database<Product>.ProductFilePath); //add to database
                 return true;
             }
             catch (Exception error)

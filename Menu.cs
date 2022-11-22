@@ -25,17 +25,24 @@ namespace MilkTeaStore
         public Supply manageSupply = new Supply();
 
         public Menu() { }
-        public  bool WelcomeMenu()
+        public void printOptionConsole(string title,string[] str)
+        {
+            Console.WriteLine(String.Format("{0}{1,-55}", "", title));
+            Console.WriteLine(String.Format("{0}{1,-55}", "", "-----------------------"));
+            for (int i = 0; i  < str.Length; i++)
+            {
+                Console.WriteLine(String.Format("{0}.{1,-55}", i + 1, str[i]));
+            }
+            Console.WriteLine();
+            Console.Write("Select an option : ");
+        }
+        public bool WelcomeMenu()
         {
             Console.Clear();
-            Console.WriteLine(String.Format("{0}{1,-55}", "", "Welcome to TeaStore"));
-            Console.WriteLine(String.Format("{0}{1,-55}", "", "-----------------------"));
-            Console.WriteLine(String.Format("{0}{1,-55}", "", "Vui long nhap vai tro :"));
-            Console.WriteLine(String.Format("{0}{1,-55}", "1.", "Khach Hang"));
-            Console.WriteLine(String.Format("{0}{1,-55}", "2.", "Nhan Vien"));
-            Console.WriteLine(String.Format("{0}{1,-55}", "3.", "Quan Ly"));
-            Console.WriteLine(String.Format("{0}{1,-55}", "4.", "Exit"));
-            Console.Write("Select an option : ");
+            string title = "WELCOME TO TEASTORE";
+            string[] listoption = { "Khach Hang", "Nhan Vien", "Quan Ly" , "Exit" };
+            printOptionConsole(title, listoption);
+
             switch (Console.ReadLine())
             {
                 case "1":
@@ -59,16 +66,15 @@ namespace MilkTeaStore
             }
         
         }
+        
+        //Khach Hang
         public  bool CustomerMenu()
         {
             Console.Clear();
-            Console.WriteLine(String.Format("{0}{1,-55}", "", "Khach hang"));
-            Console.WriteLine(String.Format("{0}{1,-55}", "", "-----------------------"));
-            Console.WriteLine(String.Format("{0}{1,-55}", "1.", "Dat Hang"));
-            Console.WriteLine(String.Format("{0}{1,-55}", "2.", "Lich su hoa don"));
-            Console.WriteLine(String.Format("{0}{1,-55}", "3.", "Quay Lai"));
-            Console.WriteLine(String.Format("{0}{1,-55}", "4.", "Thoat"));
-            Console.Write("Select an option : ");
+            string title = "Khach Hang";
+            string[] listoption = {"Dat Hang", "Lich Su Hoa Don","Quay Lai","Thoat"};
+            printOptionConsole(title, listoption);
+
             switch (Console.ReadLine())
             {
                 case "1":
@@ -101,6 +107,7 @@ namespace MilkTeaStore
         }
         public  bool OderMenu()
         {
+            Console.Clear();
             List<Product> products = null;
             products = Database<Product>.readFile(Database<Product>.ProductFilePath);
             oder = new Oder(); // Oder khai bao toan cuc
@@ -108,33 +115,36 @@ namespace MilkTeaStore
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine(String.Format("{0}", "Danh sach cac thuc uong"));
                 //Xuat bang
                 string[] labels = { "ProductID", "Name", "Size", "Price" };
                 Database<Product>.QueryTable(products, labels);
-                Console.WriteLine("1.Them Oder");
-                Console.WriteLine("2.Xoa Oder");
-                Console.WriteLine("3.Hoan Tat Oder");
-                Console.WriteLine("4. Exit ");
-                Console.Write("Select an option : ");
+                
+                //Xuat option
+                string title = "DANH SACH CAC THUC UONG";
+                string[] listoption = { "Them Oder", "Xoa Oder", "Hoan Tat Oder","Quay lai", "Exit" };
+                printOptionConsole(title, listoption);
+
                 switch (Console.ReadLine())
                 {
                     case "1": 
-                        this.oder.addOder();
+                        oder.addOder();
                         break;
                     case "2":
                         oder.printOderList();
-                        oder.deleteOder() ;
+                        oder.deleteProductInOder() ;
                         break;
                     case "3":
                         oder.addOderToDatabase();
-                        Console.Write("Hay nhap ngay hom nay de biet giam gia: ");
+                        Console.Write("Hay nhap ngay hom nay de biet giam gia (vd: 25/12): ");
                         string date = Console.ReadLine(); 
                         this.discount.DiscountID = discount.CheckDiscount(date);
                         this.bill = new Bill(cus.CusId, staff.StaffId, date,this.discount.DiscountID);
                         bill.addBill();
                         break;
                     case "4":
+                        CustomerMenu();
+                        return false;
+                    case "5":
                         Console.Clear();
                         Console.WriteLine("Ket Thuc Chuong Trinh !");
                         statusMenu = false;
@@ -144,16 +154,14 @@ namespace MilkTeaStore
                 }
             }
         }
+       
+        //Quan Ly 
         public bool ManagerMenu() {
             Console.Clear();
-            Console.WriteLine(String.Format("{0}{1,-55}", "", "Quan Ly"));
-            Console.WriteLine(String.Format("{0}{1,-55}", "", "-----------------------"));
-            Console.WriteLine(String.Format("{0}{1,-55}", "1.", "Xem danh sach"));
-            Console.WriteLine(String.Format("{0}{1,-55}", "2.", "Xem chi phi hang thang"));
-            Console.WriteLine(String.Format("{0}{1,-55}", "3.", "Quay Lai"));
-            Console.WriteLine(String.Format("{0}{1,-55}", "4.", "Thoat"));
-            Console.WriteLine();
-            Console.Write("Select an option : ");
+            string title = "Quan Ly";
+            string[] listOption = { "Xem danh sach", "Xem chi phi hang thang", "Quay Lai", "Thoat" };
+            printOptionConsole(title, listOption);
+
             switch (Console.ReadLine())
             {
                 case "1":
@@ -178,21 +186,13 @@ namespace MilkTeaStore
         public bool ListManage()
         {
             Console.Clear();
-            Console.WriteLine(String.Format("{0}{1,-55}", "", "Danh sach quan ly"));
-            Console.WriteLine(String.Format("{0}{1,-55}", "", "-----------------------"));
-            Console.WriteLine(String.Format("{0}{1,-55}", "1.", "Quan ly danh sach san pham"));
-            Console.WriteLine(String.Format("{0}{1,-55}", "2.", "Quan ly danh sach nhan vien"));
-            Console.WriteLine(String.Format("{0}{1,-55}", "3.", "Quan ly danh sach khach hang"));
-            Console.WriteLine(String.Format("{0}{1,-55}", "4.", "Quan ly danh sach oder"));
-            Console.WriteLine(String.Format("{0}{1,-55}", "5.", "Quan ly danh sach hoa don"));
-            Console.WriteLine(String.Format("{0}{1,-55}", "6.", "Quan ly danh sach giam gia"));
-            Console.WriteLine(String.Format("{0}{1,-55}", "7.", "Quan ly danh sach nguyen lieu"));
-            Console.WriteLine(String.Format("{0}{1,-55}", "8.", "Quan ly danh sach cung cap"));
-            Console.WriteLine(String.Format("{0}{1,-55}", "9.", "Lich su hoa don"));
-            Console.WriteLine(String.Format("{0}{1,-55}", "10.", "Quay Lai"));
-            Console.WriteLine(String.Format("{0}{1,-55}", "11.", "Thoat"));
-            Console.WriteLine();
-            Console.Write("Select an option : ");
+            string title = "Danh Sach Quan Ly";
+            string[] listoption = { "Quan ly danh sach san pham", "Quan ly danh sach nhan vien",
+                "Quan ly danh sach khach hang", "Quan ly danh sach oder","Quan ly danh sach hoa don",
+                "Quan ly danh sach giam gia","Quan ly danh sach nguyen lieu","Quan ly danh sach cung cap",
+                "Lich su hoa don", "Quay Lai","Thoat"};
+            printOptionConsole(title, listoption);
+
             switch (Console.ReadLine())
             {
                 case "1":
@@ -200,6 +200,9 @@ namespace MilkTeaStore
                     return true;
                 case "2":
                     ListStaffManager();
+                    return true;
+                case "3":
+                    ListCustomerManager();
                     return true;
                 case "10":
                     WelcomeMenu();
@@ -220,31 +223,24 @@ namespace MilkTeaStore
             while (true)
             {
                 Console.Clear();
-                
-                Console.WriteLine(String.Format("{0}", "Quan ly Danh sach san pham"));
-                
-                //Product table 
                 Database<Product>.Table(products);
-                Console.WriteLine("1.Them san pham");
-                Console.WriteLine("2.Xoa san pham");
-                Console.WriteLine("3.Sua san pham");
-                Console.WriteLine("4.Luu tat ca chinh sua");
-                Console.WriteLine("5.Quay Lai ");
-                Console.WriteLine("6.Thoat");
-                Console.Write("Select an option : ");
+                string title = "Quan ly Danh sach san pham";
+                string[] listOption = { "Them San Pham","Xoa San Pham","Sua San Pham","Luu Va Lam Moi", "Quay Lai", "Thoat" };
+                printOptionConsole(title, listOption);
+                
                 switch (Console.ReadLine())
                 {
                     case "1":
-                        manageProduct.addProduct();
+                        manageProduct.addManageProduct();
                         break;
                     case "2":
-                        manageProduct.deleteProduct();
+                        manageProduct.deleteManageProduct();
                         break;
                     case "3":
-                        manageProduct.editProduct();
+                        manageProduct.editManageProduct();
                         break;
                     case "4":
-                        if (manageProduct.addProducttoDataBase())
+                        if (manageProduct.addManageProducttoDataBase())
                             Console.WriteLine("Cap nhat thay doi vao database thanh cong !");
                         Console.ReadLine();
                         ListProductManager();
@@ -271,32 +267,24 @@ namespace MilkTeaStore
             while (true)
             {
                 Console.Clear();
-
-                Console.WriteLine(String.Format("{0}", "Quan ly Danh sach nhan vien"));
-                Console.WriteLine(String.Format("{0}", "-----------------------"));
-                //Staff table 
                 Database<Staff>.Table(staffs);
-                Console.WriteLine("1.Them nhan vien");
-                Console.WriteLine("2.Xoa nhan vien");
-                Console.WriteLine("3.Sua nhan vien");
-                Console.WriteLine("4.Luu tat ca chinh sua");
-                Console.WriteLine("5.Quay Lai ");
-                Console.WriteLine("6.Thoat");
-                Console.WriteLine();
-                Console.Write("Select an option : ");
+                string title = "Quan ly Danh Sach Nhan Vien";
+                string[] listOption = {"Them Nhan Vien","Xoa Nhan Vien","Sua Nhan Vien","Luu Va Lam Moi", "Quay Lai", "Thoat" };
+                printOptionConsole(title, listOption);
+
                 switch (Console.ReadLine())
                 {
                     case "1":
-                        manageStaff.addStaff();
+                        manageStaff.addManageStaff();
                         break;
                     case "2":
-                        manageStaff.deleteStaff();
+                        manageStaff.deleteManageStaff();
                         break;
                     case "3":
-                        manageStaff.editStaff();
+                        manageStaff.editManageStaff();
                         break;
                     case "4":
-                        if (manageStaff.addStafftoDataBase())
+                        if (manageStaff.addManageStafftoDataBase())
                             Console.WriteLine("Cap nhat thay doi vao database thanh cong !");
                         Console.ReadLine();
                         ListStaffManager();
@@ -317,7 +305,52 @@ namespace MilkTeaStore
 
 
         }
+        public bool ListCustomerManager()
+        {
+            List<Customer> customers = Database<Customer>.readFile(Database<Customer>.CustomerFilePath);
+
+            while (true)
+            {
+                Console.Clear();
+                Database<Customer>.Table(customers);
+                string title = "Quan ly Danh Sach Khach Hang";
+                string[] listOption = { "Them Khach Hang", "Xoa Khach Hang", "Sua Khach Hang", "Luu Va Lam Moi", "Quay Lai", "Thoat" };
+                printOptionConsole(title, listOption);
+
+                switch (Console.ReadLine())
+                {
+                    case "1":
+                        manageCustomer.addManageCustomer();
+                        break;
+                    case "2":
+                        manageCustomer.deleteManageCustomer();
+                        break;
+                    case "3":
+                        manageCustomer.editManageCustomer();
+                        break;
+                    case "4":
+                        if (manageCustomer.addManageCustomertoDataBase())
+                            Console.WriteLine("Cap nhat thay doi vao database thanh cong !");
+                        Console.ReadLine();
+                        ListCustomerManager();
+                        break;
+                    case "5":
+                        ListManage();
+                        break;
+                    case "6":
+                        Console.Clear();
+                        Console.WriteLine("Ket Thuc Chuong Trinh !");
+                        statusMenu = false;
+                        WelcomeMenu();
+                        return false;
+                    default:
+                        return true;
+                }
+            }
 
 
+        }
+
+      
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Linq;
+using System.Net;
 using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 
@@ -7,6 +8,7 @@ namespace MilkTeaStore
     class Customer:Person
     {
         public  int CusId { get; set; }
+        private List<Customer> customers;
         public Customer()
         {
            
@@ -19,7 +21,7 @@ namespace MilkTeaStore
         {
             this.CusId = id;
         }
-        public void HistoryBuying (){
+        public void HistoryBuying(){
             List<Bill> billList = Database<Bill>.readFile(Database<Bill>.BillFilePath);
             List<Customer> customerlist = Database<Customer>.readFile(Database<Customer>.CustomerFilePath);
 
@@ -52,7 +54,7 @@ namespace MilkTeaStore
             CreateNewOderMenu();
 
             this.CusId = customers.Any() ? customers.Max(x => x.CusId) + 1 : 1; // tang id cua Bill len 1
-            customers.Add(new Customer(this.CusId,this.Name,this.Numberphone,this.Address));
+            customers.Add(this);
 
             //Debug
             foreach(var cus in customers)
@@ -64,7 +66,7 @@ namespace MilkTeaStore
             Console.Write("Tiep tuc oder ---> ");
             Console.ReadLine();//Stop screen
         }
-        public void CreateNewOderMenu() // khong biet co nen bo o Customer ko
+        public void CreateNewOderMenu() 
         {
             Console.Clear();
             Console.WriteLine(String.Format("{0}{1,-55}", "", "Nhap thong tin dat hang"));
@@ -74,6 +76,114 @@ namespace MilkTeaStore
             Console.WriteLine(String.Format("{0}{1,-15}", "3.", this.Address == null  ? "Nhap dia chi giao hang " : String.Format("Dia chi giao hang:{0,8}{1,2}", "|",Address)));
             Console.WriteLine("---------------------");
         }
+
+        public void printCustomer()
+        {
+            customers = Database<Customer>.readFile(Database<Customer>.CustomerFilePath);
+            var list = customers.Where(o => o.CusId == this.CusId);
+            Database<Customer>.Table(customers);
+        }
+        public void addManageCustomer()
+        {
+            this.customers = Database<Customer>.readFile(Database<Customer>.CustomerFilePath);
+            //--Check add Customer
+            Console.WriteLine("Nhap ten khach hang de them :");
+            this.Name = Console.ReadLine();
+            Console.WriteLine("Nhap so dien thoai khach hang de them :");
+            this.Numberphone = Console.ReadLine();
+            Console.WriteLine("Nhap dia chi khach hang de them :");
+            this.Address = Console.ReadLine();
+
+            this.CusId = customers.Any() ? customers.Max(x => x.CusId) + 1 : 1; // tang id cua Customer len 1
+
+            //--Add Customer to Customers
+            customers.Add(this);
+
+            Console.WriteLine("Them thanh cong !");
+            Database<Customer>.Table(customers);
+            Console.WriteLine("<---- Back");
+            Console.ReadLine();
+        }
+        public bool deleteManageCustomer()
+        {
+            //--Check id sp
+            this.customers = Database<Customer>.readFile(Database<Customer>.CustomerFilePath);
+            int id;
+            while (true)
+            {
+                Console.Write("Nhap id nhan vien muon xoa :");
+                id = Int32.Parse(Console.ReadLine());
+                var list = from o in customers
+                           where o.CusId == id
+                           select o;
+                if (list.Any(oder => oder.CusId == id))
+                    break;
+                Console.WriteLine("Ma nhan vien khong hop le vui long nhap lai ! ");
+            };
+
+            customers.RemoveAll(x => x.CusId == id);
+
+            Console.WriteLine("Xoa thanh cong !");
+            Database<Customer>.Table(customers);
+            Console.WriteLine("<---- Back");
+            Console.ReadLine();
+            return true;
+        }
+        public bool editManageCustomer()
+        {
+            this.customers = Database<Customer>.readFile(Database<Customer>.CustomerFilePath);
+            //--Check id sp
+            int id;
+            while (true)
+            {
+                Console.Write("Nhap id nhan vien muon sua :");
+                id = Int32.Parse(Console.ReadLine());
+                var list = from o in customers
+                           where o.CusId == id
+                           select o;
+                if (list.Any(oder => oder.CusId == id))
+                    break;
+                Console.WriteLine("Ma nhan vien khong hop le vui long nhap lai ! ");
+            };
+            customers.RemoveAll(x => x.CusId == id);
+
+            this.CusId = id;
+            //--Check add Customer
+            Console.WriteLine("Nhap ten khach hang de sua :");
+            this.Name = Console.ReadLine();
+            Console.WriteLine("Nhap so dien thoai khach hang de sua :");
+            this.Numberphone = Console.ReadLine();
+            Console.WriteLine("Nhap dia chi khach hang de sua :");
+            this.Address = Console.ReadLine();
+
+            //--Add Customer to Customers
+            this.customers.Add(this);
+
+            Console.WriteLine("Sua thanh cong !");
+            Database<Customer>.Table(this.customers);
+            Console.WriteLine("<---- Back");
+            Console.ReadLine();
+
+            return true;
+        }
+        public bool addManageCustomertoDataBase()
+        {
+            try
+            {
+                var enumerable = from o in this.customers
+                                 orderby o.CusId descending
+                                 select o;
+                List<Customer> oderByList = enumerable.ToList();
+
+                Database<Customer>.writeFile(oderByList, Database<Customer>.CustomerFilePath); //add to database
+                return true;
+            }
+            catch (Exception error)
+            {
+                return false;
+            }
+        }
+
 
     }
 }

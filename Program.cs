@@ -25,13 +25,13 @@ namespace MilkTeaStore
         
         static void Main(string[] args)
         {
-            Database<Bill>.CreateDatabase(); //tao san Database
+           // Database<Bill>.CreateDatabase(); //tao san Database
             Menu menu = new Menu();
             while (Menu.statusMenu)
             {
                 menu.WelcomeMenu();
             }
-            
+
         }
 
         

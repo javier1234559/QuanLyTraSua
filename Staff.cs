@@ -8,11 +8,11 @@
         public long Salary { get; set; }
         public int AbsentDay { get; set; } = 0;
 
-        public List<Staff> staffs;
+        private List<Staff> staffs { get; set; }
         public Staff()
         {
+            
         }
-
         public Staff(int id, string name, string numberphone, string address, string WorkSchedule, string Position, long Salary,int absentday) : base(name, numberphone, address)
         {
             this.StaffId = id;
@@ -27,7 +27,7 @@
             var list = staffs.Where(o => o.StaffId == this.StaffId);
             Database<Staff>.Table(staffs);
         }
-        public void addStaff()
+        public void addManageStaff()
         {
             this.staffs = Database<Staff>.readFile(Database<Staff>.StaffFilePath);
             //--Check add Staff
@@ -56,7 +56,7 @@
             Console.WriteLine("<---- Back");
             Console.ReadLine();
         }
-        public bool deleteStaff()
+        public bool deleteManageStaff()
         {
             //--Check id sp
             this.staffs = Database<Staff>.readFile(Database<Staff>.StaffFilePath);
@@ -81,24 +81,25 @@
             Console.ReadLine();
             return true;
         }
-        public bool editStaff()
+        public bool editManageStaff()
         {
             this.staffs = Database<Staff>.readFile(Database<Staff>.StaffFilePath);
             //--Check id sp
             int id;
             while (true)
             {
-                Console.Write("Nhap id san pham muon sua :");
+                Console.Write("Nhap id nhan vien muon sua :");
                 id = Int32.Parse(Console.ReadLine());
                 var list = from o in staffs
                            where o.StaffId == id
                            select o;
                 if (list.Any(oder => oder.StaffId == id))
                     break;
-                Console.WriteLine("Ma san pham khong hop le vui long nhap lai ! ");
+                Console.WriteLine("Ma nhan vien khong hop le vui long nhap lai ! ");
             };
             staffs.RemoveAll(x => x.StaffId == id);
 
+            this.StaffId = id;
             //--Check add Staff
             Console.WriteLine("Nhap ten nhan vien de them :");
             this.Name = Console.ReadLine();
@@ -115,8 +116,6 @@
             Console.WriteLine("Nhap muc luong de them :");
             this.Salary = Int32.Parse(Console.ReadLine());
 
-            this.StaffId = staffs.Any() ? staffs.Max(x => x.StaffId) + 1 : 1; // tang id cua Staff len 1
-
             //--Add Staff to Staffs
             this.staffs.Add(this);
 
@@ -127,11 +126,15 @@
 
             return true;
         }
-        public bool addStafftoDataBase()
+        public bool addManageStafftoDataBase()
         {
             try
             {
-                Database<Staff>.writeFile(this.staffs, Database<Staff>.StaffFilePath); //add to database
+                var enumerable = from o in this.staffs
+                                 orderby o.StaffId descending
+                                 select o;
+                List<Staff> oderByList = enumerable.ToList();
+                Database<Staff>.writeFile(oderByList, Database<Staff>.StaffFilePath); //add to database
                 return true;
             }
             catch (Exception error)

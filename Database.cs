@@ -96,13 +96,7 @@ namespace MilkTeaStore
                 new Supply(7,1,"15/11",30),
             };
 
-            /*var oders = new List<Oder> {
-                new Oder(9,2,30),
-                new Oder(9,1,30),
-                new Oder(9,1,30),
-                new Oder(9,5,30),
-                new Oder(11,5,30),
-            };*/
+            
             Database<Customer>.writeFile(customerList, Database<T>.CustomerFilePath);
             Database<Product>.writeFile(ProductList, Database<T>.ProductFilePath);
             Database<Staff>.writeFile(StaffList, Database<T>.StaffFilePath);
@@ -118,7 +112,7 @@ namespace MilkTeaStore
             if (!enumerable.Any()) return;
 
             List<T> oblist = enumerable.ToList();
-
+            
             DataTable data = TableDraw.ToDataTable(oblist);
 
             string[] columnNames = data.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToArray();
