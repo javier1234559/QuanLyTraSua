@@ -15,7 +15,8 @@ namespace TeaStorel
         public static List<Staff> staffs { get; set; }
         public static List<Bill> bills { get; set; }
         public static List<Discount> discounts { get; set; }
-
-
+        public static List<Income> income { get; set; }
+        public static List<OperateCost> operateCosts { get; set; }
+    
     }
 }

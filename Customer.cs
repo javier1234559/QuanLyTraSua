@@ -33,11 +33,9 @@ namespace TeaStorel
                         select b;
 
             Console.Clear();
-            Console.WriteLine("\t\t\tLich su hoa don cua " + this.Name + "\n");
+            Console.WriteLine("\nLich su hoa don cua " + this.Name);
             TableDraw.Table(query);
-            Console.WriteLine("<------ Back");
-            Console.ReadLine();
-
+            
         }
 
         public void CreateNewOderMenu()
@@ -157,7 +155,7 @@ namespace TeaStorel
             try
             {
                 var enumerable = from o in CacheData.customers
-                                 orderby o.CusId descending
+                                 orderby o.CusId ascending
                                  select o;
                 List<Customer> oderByList = enumerable.ToList();
 

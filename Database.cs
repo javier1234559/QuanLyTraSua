@@ -19,9 +19,8 @@ namespace TeaStorel
         public static string BillFilePath { get; set; } = "DataBase//bill.csv";
         public static string OrderFilePath { get; set; } = "DataBase//order.csv";
         public static string ProductFilePath { get; set; } = "DataBase//product.csv";
-        public static string SupplyFilePath { get; set; } = "DataBase//supply.csv";
-        public static string IngredientFilePath { get; set; } = "DataBase//ingredient.csv";
-
+        public static string OperateCostFilePath { get; set; } = "DataBase//operatecost.csv";
+        public static string IncomeFilePath { get; set; } = "DataBase//income.csv";
 
         public static void writeFile(List<T> listobjects, string filepath)
         {
@@ -55,8 +54,8 @@ namespace TeaStorel
             var customerList = new List<Customer>
             {
                 new Customer(1,"Nhat","0962472106","40/104fdfsdf"),
-                new Customer(2, "Hung", "0123456789", "40/104fdfsdf"),
-                new Customer(3, "Hang", "09422323", "40/104fdfsdf")
+                new Customer(2, "Nhat", "123", "40/104fdfsdf"),
+                new Customer(3, "Hang", "123", "40/104fdfsdf")
             };
             var ProductList = new List<Product>
             {
@@ -72,45 +71,50 @@ namespace TeaStorel
             };
             var StaffList = new List<Staff>
             {
-                new Staff(1,"Ngoc","1234567","20/3 duong hang tre","Fulltime","NhanVien",1200,0),
-                new Staff(2,"Ngoc","1234567","20/3 duong hang tre","Fulltime","NhanVien",1200,0),
-                new Staff(3,"Ngoc","1234567","20/3 duong hang tre","Fulltime","NhanVien",1200,0),
+                new Staff(1,"Nhat","123","20/3 duong hang tre","Fulltime","NhanVien",1200,0),
+                new Staff(2,"Hung","123","20/3 duong hang tre","Fulltime","NhanVien",1200,0),
+                new Staff(3,"Ngoc","123","20/3 duong hang tre","Fulltime","NhanVien",1200,0),
             };
             var DiscountList = new List<Discount>
             {
                 new Discount(1,"25/12",0.5,"Giam gia giang sinh"),
                 new Discount(2,"15/11",0.2,"Giam gia sinh nhat"),
             };
-            var IngredientList = new List<Ingredient> {
-                new Ingredient(1,"Sugar",3000,"Cat Linh"),
-                new Ingredient(2,"Chan Chau",1000,"Cat Linh"),
-                new Ingredient(3,"Sugar",200,"Cat Linh")
+            var billList = new List<Bill> {
+                new Bill(1,1,1,"20/10",1,20000),
+                new Bill(2,1,1,"30/10",1,20000),
+                new Bill(3,1,1,"1/11",1,20000),
+                new Bill(4,2,2,"13/11",1,20000),
+                new Bill(5,2,2,"2/11",1,20000),
+                new Bill(6,2,2,"4/11",1,20000),
+                new Bill(7,3,3,"5/12",2,20000),
+                new Bill(8,3,3,"5/12",2,20000),
+                new Bill(9,3,3,"5/12",2,20000),
             };
-            var BillList = new List<Bill> {
-                new Bill(1,1,1,"20/10/2002",1,20000),
-                new Bill(2,1,1,"20/10/2002",1,20000),
-                new Bill(3,1,1,"20/10/2002",1,20000),
+            var operateCosts = new List<OperateCost>
+            {
+                new OperateCost(1,"Dien",300),
+                new OperateCost(2,"Mat Bang",2300),
+                new OperateCost(3,"Nuoc",10)
             };
-            var SupplyList = new List<Supply> {
-                new Supply(1,1,"15/11",30),
-                new Supply(1,2,"15/11",30),
-                new Supply(1,3,"15/11",30),
-                new Supply(4,1,"15/11",30),
-                new Supply(7,1,"15/11",30),
+            var incomes = new List<Income>
+            {
+                new Income(1,"9",3000)
             };
             var oders = new List<Order>
             {
-                new Order(1,5,2)
+                new Order(3,5,2)
             };
+
 
             //Add to DataBase
             Database<Customer>.writeFile(customerList, Database<T>.CustomerFilePath);
             Database<Product>.writeFile(ProductList, Database<T>.ProductFilePath);
             Database<Staff>.writeFile(StaffList, Database<T>.StaffFilePath);
             Database<Discount>.writeFile(DiscountList, Database<T>.DiscountFilePath);
-            Database<Bill>.writeFile(BillList, Database<T>.BillFilePath);
-            Database<Ingredient>.writeFile(IngredientList, Database<T>.IngredientFilePath);
-            Database<Supply>.writeFile(SupplyList, Database<T>.SupplyFilePath);
+            Database<Bill>.writeFile(billList, Database<T>.BillFilePath);
+            Database<OperateCost>.writeFile(operateCosts, Database<OperateCost>.OperateCostFilePath);
+            Database<Income>.writeFile(incomes, Database<Income>.IncomeFilePath);
             Database<Order>.writeFile(oders, Database<Order>.OrderFilePath);
 
         }

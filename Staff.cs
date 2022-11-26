@@ -60,9 +60,25 @@
         {
             CacheData.staffs = Database<Staff>.readFile(Database<Staff>.StaffFilePath);
             var list = CacheData.staffs.Where(o => o.StaffId == this.StaffId);
-            TableDraw.Table(CacheData.staffs);
+            TableDraw.Table(list);
+            Console.ReadLine();
         }
 
+        public void HistoryOderForCustomer()
+        {
+            List<Bill> billList = Database<Bill>.readFile(Database<Bill>.BillFilePath);
+
+            var query = from b in billList
+                        where b.StaffID == this.StaffId
+                        select b;
+
+            Console.Clear();
+            Console.WriteLine("\nLich su order cho khach cua nhan vien " + this.Name);
+            TableDraw.Table(query);
+            Console.WriteLine("<------ Back");
+            Console.ReadLine();
+
+        }
 
         //Ham xu ly CRUD manager lien quan den Staff
         public void AddManageStaff()
@@ -178,7 +194,7 @@
             try
             {
                 var enumerable = from o in CacheData.staffs
-                                 orderby o.StaffId descending
+                                 orderby o.StaffId ascending
                                  select o;
                 List<Staff> oderByList = enumerable.ToList();
                 Database<Staff>.writeFile(oderByList, Database<Staff>.StaffFilePath); //add to database

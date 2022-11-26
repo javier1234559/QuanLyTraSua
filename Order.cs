@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace TeaStorel
 {
@@ -50,7 +51,11 @@ namespace TeaStorel
                 this.BillID = bills.Any() ? bills.Max(x => x.BillID) + 1 : 1; // tang id cua Bill len 1
                 Console.Write("Nhap so luong : ");
                 this.ProductQuantity = Int32.Parse(Console.ReadLine());
+
+                //Giam so luong san pham ton kho
+                products.Where(p => p.ProductID == this.ProductID).First().quantityInStock -= this.ProductQuantity;
                 CacheData.orders.Add(this);
+                
                 Console.Write("Them 1 order nua ? (y/n)");
                 string c = Console.ReadLine();
                 if (c == "n") break;
@@ -121,10 +126,6 @@ namespace TeaStorel
                 return false;
             }
         }
-
-
-        //Ham xu ly CRUD manager lien quan den Order
-
 
     }
 }

@@ -144,7 +144,7 @@ namespace TeaStorel
             this.quantityInStock = Int32.Parse(Console.ReadLine());
 
             //Add product to CacheData.products
-            CacheData.products.Add(new Product(this.ProductID, this.Name, kichthuoc, this.Price, this.OriginalPrice, this.quantityInStock));
+            CacheData.products.Add(this);
             Console.WriteLine("Sua thanh cong !");
 
             //Print Table
@@ -160,7 +160,7 @@ namespace TeaStorel
             try
             {
                 var enumerable = from o in CacheData.products
-                                 orderby o.ProductID descending
+                                 orderby o.ProductID ascending
                                  select o;
                 List<Product> oderByList = enumerable.ToList();
                 Database<Product>.writeFile(oderByList, Database<Product>.ProductFilePath); //add to database

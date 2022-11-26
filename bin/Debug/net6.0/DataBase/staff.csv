@@ -1,4 +1,4 @@
 ﻿StaffId,WorkSchedule,Position,Salary,AbsentDay,Name,Numberphone,Address
-1,Fulltime,NhanVien,1200,0,Ngoc,1234567,20/3 duong hang tre
-2,Fulltime,NhanVien,1200,0,Ngoc,1234567,20/3 duong hang tre
-3,Fulltime,NhanVien,1200,0,Ngoc,1234567,20/3 duong hang tre
+1,Fulltime,NhanVien,1200,0,Nhat,123,20/3 duong hang tre
+2,Fulltime,NhanVien,1200,0,Hung,123,20/3 duong hang tre
+3,Fulltime,NhanVien,1200,0,Ngoc,123,20/3 duong hang tre
