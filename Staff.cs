@@ -20,6 +20,7 @@
             this.AbsentDay = absentday;
         }
 
+
         //Ham xu ly 1 Stafff
         public void LoginMenuThisStaff()
         {
@@ -79,6 +80,7 @@
             Console.ReadLine();
 
         }
+
 
         //Ham xu ly CRUD manager lien quan den Staff
         public void AddManageStaff()

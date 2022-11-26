@@ -35,7 +35,7 @@ namespace TeaStorel
             Console.Clear();
             Console.WriteLine("\nLich su hoa don cua " + this.Name);
             TableDraw.Table(query);
-            
+
         }
 
         public void CreateNewOderMenu()
