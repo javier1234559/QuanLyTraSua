@@ -6,10 +6,12 @@
         public int IngreID { get; set; }
         public string DateSupply { get; set; }
         public int Quantity { get; set; }
+
         public Supply()
         {
 
         }
+
         public Supply(int productID, int ingreID, string dateSupply, int quantity)
         {
             ProductID = productID;

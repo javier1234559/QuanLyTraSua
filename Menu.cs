@@ -8,40 +8,43 @@ namespace TeaStorel
         public static bool statusMenu = true; //Thoat ct
 
         //Thuoc tinh luu tru de thao tac Oder
-        public Customer cus ;
-        public Oder oder;
+        public Customer cus;
+        public Order order;
         public Staff staff = new Staff();
         public Discount discount = new Discount();
-        public Bill bill ;
+        public Bill bill;
 
         //Thuoc tinh luu tru de thao tac quan ly
         public Product manageProduct = new Product();
         public Staff manageStaff = new Staff();
         public Customer manageCustomer = new Customer();
-        public Oder manageOder = new Oder();
+        public Order manageOder = new Order();
         public Bill manageBill = new Bill();
         public Discount manageDiscount = new Discount();
         public Ingredient manageIngredient = new Ingredient();
         public Supply manageSupply = new Supply();
 
         public Menu() { }
-        public void printOptionConsole(string title,string[] str)
+
+        //Menu Chinh
+        public void PrintOptionConsole(string title, string[] str)
         {
             Console.WriteLine(String.Format("{0}{1,-55}", "", title));
             Console.WriteLine(String.Format("{0}{1,-55}", "", "-----------------------"));
-            for (int i = 0; i  < str.Length; i++)
+            for (int i = 0; i < str.Length; i++)
             {
                 Console.WriteLine(String.Format("{0}.{1,-55}", i + 1, str[i]));
             }
             Console.WriteLine();
             Console.Write("Select an option : ");
         }
-        public bool WelcomeMenu()
+
+        public bool MainMenu()
         {
             Console.Clear();
             string title = "WELCOME TO TEASTORE";
-            string[] listoption = { "Khach Hang", "Nhan Vien", "Quan Ly" , "Exit" };
-            printOptionConsole(title, listoption);
+            string[] listoption = { "Khach Hang", "Nhan Vien", "Quan Ly", "Exit" };
+            PrintOptionConsole(title, listoption);
 
             switch (Console.ReadLine())
             {
@@ -63,69 +66,16 @@ namespace TeaStorel
                 default:
                     return true;
             }
-        
-        }
-        //Nhan Vien
-        public void LoginNhanVien()
-        {
-            staff.loginMenu();
 
-            while (true) { 
-
-                Console.Write("Ten nhan vien : ");
-                staff.Name = Console.ReadLine();
-                staff.loginMenu();
-                Console.Write("So dien thoai : ");
-                staff.Numberphone = Console.ReadLine();
-                staff.loginMenu();
-
-                if (staff.checkAndLogin()) break;
-
-                Console.WriteLine("Ten hoac so dien thoai khong dung !");
-                Console.WriteLine("Thoat ? (y/n)");
-                string s = Console.ReadLine();
-                if (s == "y") break;
-            }
-            Console.WriteLine("Dang Nhap thanh cong ! " );
-            Console.WriteLine("------> Next");
-            Console.ReadLine();
-            StaffMenu();
-        }
-        public bool StaffMenu()
-        {
-            Console.Clear();
-            string title = "Xin chao nhan vien  " + this.staff.Name;
-            string[] listoption = { "Xem thong tin ", "Xem lich su oder ", "Quay Lai", "Thoat" };
-            printOptionConsole(title, listoption);
-
-            switch (Console.ReadLine())
-            {
-                case "1":
-                    //OderMenu();
-                    return true;
-                case "2":
-                    //HistoryOderStaff();
-                    return true;
-                case "3":
-                    WelcomeMenu();
-                    return true;
-                case "4":
-                    Console.Clear();
-                    Console.WriteLine("Ket Thuc Chuong Trinh !");
-                    statusMenu = false;
-                    return false;
-                default:
-                    return true;
-            }
         }
 
-        //Khach Hang
 
-        public void CreateNewCustomer()
+        //Menu Khach Hang
+        public void CreateNewCustomer() //Tao moi Customer nhung neu cung 1 Ten,Sdt thi xem nhu la Dang Nhap
         {
-            //Get data from database
             List<Customer> customers = Database<Customer>.readFile(Database<Customer>.CustomerFilePath);
 
+            //Add Customer
             this.cus.CreateNewOderMenu();
             Console.Write("Ten khach hang : ");
             this.cus.Name = Console.ReadLine();
@@ -136,23 +86,22 @@ namespace TeaStorel
             Console.Write("Dia chi dat hang : ");
             this.cus.Address = Console.ReadLine();
             this.cus.CreateNewOderMenu();
-
             this.cus.CusId = customers.Any() ? customers.Max(x => x.CusId) + 1 : 1; // tang id cua Bill len 1
             customers.Add(this.cus);
 
-
-            //Them vao database
+            //Add to DataBase
             Database<Customer>.writeFile(customers, Database<Customer>.CustomerFilePath); //add to database
-            Console.Write("Tiep tuc oder ---> ");
+            Console.Write("Tiep tuc order ---> ");
             Console.ReadLine();//Stop screen
             CustomerMenu();
         }
+
         public bool CustomerMenu()
         {
             Console.Clear();
             string title = "Xin chao khach hang " + this.cus.Name;
             string[] listoption = { "Dat Hang", "Lich Su Hoa Don", "Quay Lai", "Thoat" };
-            printOptionConsole(title, listoption);
+            PrintOptionConsole(title, listoption);
 
             switch (Console.ReadLine())
             {
@@ -160,11 +109,11 @@ namespace TeaStorel
                     OderMenu();
                     return true;
                 case "2":
-                    cus.HistoryBuying();
+                    cus.HistoryBuying(); // Se co lich su neu trung ten,sdt
                     CustomerMenu();
                     return true;
                 case "3":
-                    WelcomeMenu();
+                    MainMenu();
                     return true;
                 case "4":
                     Console.Clear();
@@ -175,49 +124,52 @@ namespace TeaStorel
                     return true;
             }
         }
-        public  bool OderMenu()
+
+        public bool OderMenu()
         {
             Console.Clear();
             List<Product> products = null;
             products = Database<Product>.readFile(Database<Product>.ProductFilePath);
-            oder = new Oder(); // Oder khai bao toan cuc
+            order = new Order(); // Tao 1 Oder
 
             while (true)
             {
+                //Xuat Danh sach Product
                 Console.Clear();
-                //Xuat bang
                 string[] labels = { "ProductID", "Name", "Size", "Price" };
-                Database<Product>.QueryTable(products, labels);
-                
-                //Xuat option
-                string title = "DANH SACH CAC THUC UONG";
-                string[] listoption = { "Them Oder", "Xoa Oder", "Hoan Tat Oder","Quay lai", "Exit" };
-                printOptionConsole(title, listoption);
+                TableDraw.TableHavePropSelected(products, labels);
 
+                //Xuat Option
+                string title = "DANH SACH CAC THUC UONG";
+                string[] listoption = { "Them Oder", "Xoa Oder", "Hoan Tat Oder", "Quay lai", "Exit" };
+                PrintOptionConsole(title, listoption);
                 switch (Console.ReadLine())
                 {
-                    case "1": 
-                        oder.addOder();
+                    case "1":
+                        order.AddThisOrder();
                         break;
                     case "2":
-                        oder.printOderList();
-                        oder.deleteProductInOder() ;
+                        order.PrintThisOrderList();
+                        order.DeleteProductInOrder();
                         break;
                     case "3":
-                        oder.addOderToDatabase();
+                        order.AddThisOrderToDatabase();
                         Console.Write("Hay nhap ngay hom nay de biet giam gia (vd: 25/12): ");
                         string date = Console.ReadLine();
                         Console.WriteLine("Nhap ma nhan vien neu co (y/n)");
                         string ma = Console.ReadLine();
-                        if( ma == "y"){
+                        if (ma == "y")
+                        {
                             int staffOderId = Int32.Parse(Console.ReadLine());
                             this.discount.DiscountID = discount.CheckDiscount(date);
-                            this.bill = new Bill(cus.CusId, staffOderId, date,this.discount.DiscountID);
-                            bill.addBill();
+                            this.bill = new Bill(cus.CusId, staffOderId, date, this.discount.DiscountID);
+                            bill.AddThisBillToCache();
                         }
-                        else {
+                        else
+                        {
+                            this.discount.DiscountID = discount.CheckDiscount(date);
                             this.bill = new Bill(cus.CusId, date, this.discount.DiscountID);
-                            bill.addBill();
+                            bill.AddThisBillToCache();
                         }
                         break;
                     case "4":
@@ -231,27 +183,58 @@ namespace TeaStorel
                     default:
                         return true;
                 }
+
             }
         }
-       
-        //Quan Ly 
-        public bool ManagerMenu() {
+
+
+        //Menu Nhan Vien
+        public void LoginNhanVien()
+        {
+            //Login Staff
+            staff.LoginMenuThisStaff();
+            while (true)
+            {
+                //Input Login
+                Console.Write("Ten nhan vien : ");
+                staff.Name = Console.ReadLine();
+                staff.LoginMenuThisStaff();      // Ham Login Menu lap lai de xem gia tri vua nhap tren menu
+                Console.Write("So dien thoai : ");
+                staff.Numberphone = Console.ReadLine();
+                staff.LoginMenuThisStaff();
+
+                //Check Login
+                if (staff.CheckAndLoginThisStaff()) break;
+                Console.WriteLine("Ten hoac so dien thoai khong dung !");
+                Console.WriteLine("Thoat ? (y/n)");
+                string s = Console.ReadLine();
+                if (s == "y") break;
+            }
+
+            //Login thanh cong va chuyen sang Staff Menu
+            Console.WriteLine("Dang Nhap thanh cong ! ");
+            Console.WriteLine("------> Next");
+            Console.ReadLine();
+            StaffMenu();
+        }
+
+        public bool StaffMenu()
+        {
             Console.Clear();
-            string title = "Quan Ly";
-            string[] listOption = { "Xem danh sach", "Xem chi phi hang thang", "Quay Lai", "Thoat" };
-            printOptionConsole(title, listOption);
+            string title = "Xin chao nhan vien  " + this.staff.Name;
+            string[] listoption = { "Xem thong tin ", "Xem lich su order ", "Quay Lai", "Thoat" };
+            PrintOptionConsole(title, listoption);
 
             switch (Console.ReadLine())
             {
                 case "1":
-                    ListManage();
+                    //OderMenu();
                     return true;
                 case "2":
-                    Console.WriteLine("Chua hoan tat ");
-                    Console.ReadLine(); // STOP sreen
+                    //HistoryOderStaff();
                     return true;
                 case "3":
-                    WelcomeMenu();
+                    MainMenu();
                     return true;
                 case "4":
                     Console.Clear();
@@ -262,29 +245,59 @@ namespace TeaStorel
                     return true;
             }
         }
-        public bool ListManage()
+
+
+        //Menu Quan Ly 
+        public bool ManagerMenu()
+        {
+            Console.Clear();
+            string title = "Quan Ly";
+            string[] listOption = { "Tao Them Xoa Sua Danh Sach", "Xem Chi Phi Hang Thang", "Quay Lai", "Thoat" };
+            PrintOptionConsole(title, listOption);
+            switch (Console.ReadLine())
+            {
+                case "1":
+                    CrudManagerList();
+                    return true;
+                case "2":
+                    Console.WriteLine("Chua hoan tat ");
+                    Console.ReadLine(); // STOP sreen
+                    return true;
+                case "3":
+                    MainMenu();
+                    return true;
+                case "4":
+                    Console.Clear();
+                    Console.WriteLine("Ket Thuc Chuong Trinh !");
+                    statusMenu = false;
+                    return false;
+                default:
+                    return true;
+            }
+        }
+
+        public bool CrudManagerList()
         {
             Console.Clear();
             string title = "Danh Sach Quan Ly";
             string[] listoption = { "Quan ly danh sach san pham", "Quan ly danh sach nhan vien",
-                "Quan ly danh sach khach hang", "Quan ly danh sach oder","Quan ly danh sach hoa don",
+                "Quan ly danh sach khach hang", "Quan ly danh sach order","Quan ly danh sach hoa don",
                 "Quan ly danh sach giam gia","Quan ly danh sach nguyen lieu","Quan ly danh sach cung cap",
                 "Lich su hoa don", "Quay Lai","Thoat"};
-            printOptionConsole(title, listoption);
-
+            PrintOptionConsole(title, listoption);
             switch (Console.ReadLine())
             {
                 case "1":
-                    ListProductManager();
+                    CrudProduct();
                     return true;
                 case "2":
-                    ListStaffManager();
+                    CrudStaff();
                     return true;
                 case "3":
-                    ListCustomerManager();
+                    CrudCustomer();
                     return true;
                 case "10":
-                    WelcomeMenu();
+                    MainMenu();
                     return true;
                 case "11":
                     Console.Clear();
@@ -295,37 +308,38 @@ namespace TeaStorel
                     return true;
             }
         }
-        public bool ListProductManager()
+
+        public bool CrudProduct()
         {
-            List<Product> products =  Database<Product>.readFile(Database<Product>.ProductFilePath);
+            List<Product> products = Database<Product>.readFile(Database<Product>.ProductFilePath);
 
             while (true)
             {
                 Console.Clear();
-                Database<Product>.Table(products);
+                TableDraw.Table(products);
                 string title = "Quan ly Danh sach san pham";
-                string[] listOption = { "Them San Pham","Xoa San Pham","Sua San Pham","Luu Va Lam Moi", "Quay Lai", "Thoat" };
-                printOptionConsole(title, listOption);
-                
+                string[] listOption = { "Them San Pham", "Xoa San Pham", "Sua San Pham", "Luu Va Lam Moi", "Quay Lai", "Thoat" };
+                PrintOptionConsole(title, listOption);
+
                 switch (Console.ReadLine())
                 {
                     case "1":
-                        manageProduct.addManageProduct();
+                        manageProduct.AddProductManager();
                         break;
                     case "2":
-                        manageProduct.deleteManageProduct();
+                        manageProduct.DeleteManageProduct();
                         break;
                     case "3":
-                        manageProduct.editManageProduct();
+                        manageProduct.EditManageProduct();
                         break;
                     case "4":
-                        if (manageProduct.addManageProducttoDataBase())
+                        if (manageProduct.AddManageProducttoDataBase())
                             Console.WriteLine("Cap nhat thay doi vao database thanh cong !");
                         Console.ReadLine();
-                        ListProductManager();
+                        CrudProduct();
                         break;
                     case "5":
-                        ListManage();
+                        CrudManagerList();
                         break;
                     case "6":
                         Console.Clear();
@@ -339,43 +353,44 @@ namespace TeaStorel
 
 
         }
-        public bool ListStaffManager()
+
+        public bool CrudStaff()
         {
             List<Staff> staffs = Database<Staff>.readFile(Database<Staff>.StaffFilePath);
 
             while (true)
             {
                 Console.Clear();
-                Database<Staff>.Table(staffs);
+                TableDraw.Table(staffs);
                 string title = "Quan ly Danh Sach Nhan Vien";
-                string[] listOption = {"Them Nhan Vien","Xoa Nhan Vien","Sua Nhan Vien","Luu Va Lam Moi", "Quay Lai", "Thoat" };
-                printOptionConsole(title, listOption);
+                string[] listOption = { "Them Nhan Vien", "Xoa Nhan Vien", "Sua Nhan Vien", "Luu Va Lam Moi", "Quay Lai", "Thoat" };
+                PrintOptionConsole(title, listOption);
 
                 switch (Console.ReadLine())
                 {
                     case "1":
-                        manageStaff.addManageStaff();
+                        manageStaff.AddManageStaff();
                         break;
                     case "2":
-                        manageStaff.deleteManageStaff();
+                        manageStaff.DeleteManageStaff();
                         break;
                     case "3":
-                        manageStaff.editManageStaff();
+                        manageStaff.EditManageStaff();
                         break;
                     case "4":
-                        if (manageStaff.addManageStafftoDataBase())
+                        if (manageStaff.AddManageStafftoDataBase())
                             Console.WriteLine("Cap nhat thay doi vao database thanh cong !");
                         Console.ReadLine();
-                        ListStaffManager();
+                        CrudStaff();
                         break;
                     case "5":
-                        ListManage();
+                        CrudManagerList();
                         break;
                     case "6":
                         Console.Clear();
                         Console.WriteLine("Ket Thuc Chuong Trinh !");
                         statusMenu = false;
-                        WelcomeMenu();
+                        MainMenu();
                         return false;
                     default:
                         return true;
@@ -384,43 +399,44 @@ namespace TeaStorel
 
 
         }
-        public bool ListCustomerManager()
+
+        public bool CrudCustomer()
         {
             List<Customer> customers = Database<Customer>.readFile(Database<Customer>.CustomerFilePath);
 
             while (true)
             {
                 Console.Clear();
-                Database<Customer>.Table(customers);
+                TableDraw.Table(customers);
                 string title = "Quan ly Danh Sach Khach Hang";
                 string[] listOption = { "Them Khach Hang", "Xoa Khach Hang", "Sua Khach Hang", "Luu Va Lam Moi", "Quay Lai", "Thoat" };
-                printOptionConsole(title, listOption);
+                PrintOptionConsole(title, listOption);
 
                 switch (Console.ReadLine())
                 {
                     case "1":
-                        manageCustomer.addManageCustomer();
+                        manageCustomer.AddManageCustomer();
                         break;
                     case "2":
-                        manageCustomer.deleteManageCustomer();
+                        manageCustomer.DeleteManageCustomer();
                         break;
                     case "3":
-                        manageCustomer.editManageCustomer();
+                        manageCustomer.EditManageCustomer();
                         break;
                     case "4":
-                        if (manageCustomer.addManageCustomertoDataBase())
+                        if (manageCustomer.AddManageCustomertoDataBase())
                             Console.WriteLine("Cap nhat thay doi vao database thanh cong !");
                         Console.ReadLine();
-                        ListCustomerManager();
+                        CrudCustomer();
                         break;
                     case "5":
-                        ListManage();
+                        CrudManagerList();
                         break;
                     case "6":
                         Console.Clear();
                         Console.WriteLine("Ket Thuc Chuong Trinh !");
                         statusMenu = false;
-                        WelcomeMenu();
+                        MainMenu();
                         return false;
                     default:
                         return true;
@@ -430,6 +446,6 @@ namespace TeaStorel
 
         }
 
-      
+
     }
 }

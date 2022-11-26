@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace TeaStorel
+﻿namespace TeaStorel
 {
     class Person
     {
@@ -8,15 +6,15 @@ namespace TeaStorel
         public string Numberphone { get; set; }
         public string Address { get; set; }
 
-        public Person()
-        {
-        }
+
+        public Person() { }
 
         public Person(string name, string numberphone)
         {
             Name = name;
             Numberphone = numberphone;
         }
+
         public Person(string name, string numberphone, string address)
         {
             Name = name;
@@ -24,7 +22,7 @@ namespace TeaStorel
             Address = address;
         }
 
-        public virtual void Output()
+        public virtual void DisplayPerson()
         {
             Console.WriteLine("Ten : " + Name);
             Console.WriteLine("So dien thoai : " + Numberphone);

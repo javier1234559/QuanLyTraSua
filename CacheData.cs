@@ -9,12 +9,13 @@ namespace TeaStorel
 {
     static class CacheData
     {
-        public static  List<Oder> oders { get; set; }
+        public static List<Order> orders { get; set; }
         public static List<Customer> customers { get; set; }
         public static List<Product> products { get; set; }
         public static List<Staff> staffs { get; set; }
-
         public static List<Bill> bills { get; set; }
+        public static List<Discount> discounts { get; set; }
+
 
     }
 }

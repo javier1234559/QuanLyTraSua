@@ -7,10 +7,9 @@
         public long Price { get; set; }
         public string Supplier { get; set; }
 
-        public Ingredient()
-        {
 
-        }
+        public Ingredient() { }
+
         public Ingredient(int ingreID, string name, long price, string supplier)
         {
             IngreID = ingreID;
@@ -18,5 +17,8 @@
             Price = price;
             Supplier = supplier;
         }
+
+
+
     }
 }

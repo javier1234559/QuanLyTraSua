@@ -3,7 +3,6 @@ using LINQtoCSV;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
-using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using System.Xml.Linq;
@@ -12,31 +11,33 @@ using DataRow = System.Data.DataRow;
 namespace TeaStorel
 {
     //Generic
-    public  class Database<T> where T : class ,new()
+    public class Database<T> where T : class, new()
     {
-        public static string DiscountFilePath { get; set; } = "DataBase//dicount.csv";
+        public static string DiscountFilePath { get; set; } = "DataBase//discount.csv";
         public static string CustomerFilePath { get; set; } = "DataBase//customer.csv";
         public static string StaffFilePath { get; set; } = "DataBase//staff.csv";
         public static string BillFilePath { get; set; } = "DataBase//bill.csv";
-        public static string OderFilePath { get; set; } = "DataBase//oder.csv";
+        public static string OrderFilePath { get; set; } = "DataBase//order.csv";
         public static string ProductFilePath { get; set; } = "DataBase//product.csv";
         public static string SupplyFilePath { get; set; } = "DataBase//supply.csv";
         public static string IngredientFilePath { get; set; } = "DataBase//ingredient.csv";
-       
+
+
         public static void writeFile(List<T> listobjects, string filepath)
         {
             var csvFileConfig = new CsvFileDescription
-                {
-                    FirstLineHasColumnNames = true,
-                    SeparatorChar = ',',
-                };
+            {
+                FirstLineHasColumnNames = true,
+                SeparatorChar = ',',
+            };
 
             var csvContext = new CsvContext();
             ProductFilePath = filepath;
             csvContext.Write(listobjects, ProductFilePath, csvFileConfig);
         }
+
         public static List<T> readFile(string filepath)
-        { 
+        {
             CsvFileDescription inputFileDescription = new CsvFileDescription
             {
                 SeparatorChar = ',',
@@ -44,9 +45,11 @@ namespace TeaStorel
             };
             CsvContext cc = new CsvContext();
             var list = cc.Read<T>(filepath, inputFileDescription);
-                
+
             return list.ToList<T>();
-            }
+
+        }
+
         public static void CreateDatabase()
         {
             var customerList = new List<Customer>
@@ -57,7 +60,7 @@ namespace TeaStorel
             };
             var ProductList = new List<Product>
             {
-                 new Product(1,"Tra Sua",SIZE.S,10000,10,0,0,190),
+                new Product(1,"Tra Sua",SIZE.S,10000,10,0,0,190),
                 new Product(2,"Tra Sua",SIZE.L,10000,10,0,0,20),
                 new Product(3,"Tra Sua",SIZE.M,10000,10,0,0,40),
                 new Product(4,"Tra Dao",SIZE.S,10000,10,0,0,20),
@@ -95,12 +98,12 @@ namespace TeaStorel
                 new Supply(4,1,"15/11",30),
                 new Supply(7,1,"15/11",30),
             };
-
-            var oders = new List<Oder>
+            var oders = new List<Order>
             {
-                new Oder(1,5,2)
+                new Order(1,5,2)
             };
-            
+
+            //Add to DataBase
             Database<Customer>.writeFile(customerList, Database<T>.CustomerFilePath);
             Database<Product>.writeFile(ProductList, Database<T>.ProductFilePath);
             Database<Staff>.writeFile(StaffList, Database<T>.StaffFilePath);
@@ -108,91 +111,9 @@ namespace TeaStorel
             Database<Bill>.writeFile(BillList, Database<T>.BillFilePath);
             Database<Ingredient>.writeFile(IngredientList, Database<T>.IngredientFilePath);
             Database<Supply>.writeFile(SupplyList, Database<T>.SupplyFilePath);
-            Database<Oder>.writeFile(oders, Database<Oder>.OderFilePath); //add to database
-
-
-        }
-        public static void Table(IEnumerable<T> enumerable) {
-            if (!enumerable.Any()) return;
-
-            List<T> oblist = enumerable.ToList();
-            
-            DataTable data = TableDraw.ToDataTable(oblist);
-
-            string[] columnNames = data.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToArray();
-            DataRow[] rows = data.Select();
-
-            var table = new ConsoleTable(columnNames);
-
-            foreach (DataRow row in rows)
-            {
-                table.AddRow(row.ItemArray);
-            }
-            table.Write(Format.Alternative);
-        }
-        public static void QueryTable(IEnumerable<T> enumerable,string[] props )
-        {
-            List<T> oblist = enumerable.ToList(); // convert to List<string>
-
-            DataTable data = TableDraw.ToDataTable(oblist);
-
-            var tb = new DataTable(typeof(T).Name);
-            foreach (var prop in props)
-            {
-                tb.Columns.Add(prop, typeof(string));
-            }
-            foreach (var item in oblist)
-            {
-                var values = new object[props.Length];
-                for (var i = 0; i < props.Length; i++)
-                {
-                    values[i] = TableDraw.GetPropValue(item, props[i]);
-                }
-                tb.Rows.Add(values);
-            }
-
-            string[] columnNames = tb.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToArray();
-            DataRow[] rows = tb.Select();
-            var table = new ConsoleTable(props);
-
-            foreach (DataRow row in rows)
-            {
-                table.AddRow(row.ItemArray);
-            }
-            table.Write(Format.Alternative);
+            Database<Order>.writeFile(oders, Database<Order>.OrderFilePath);
 
         }
-        
-    }
-    public static class TableDraw
-    {
-        public static DataTable ToDataTable<T>(this List<T> items)
-        {
-            var tb = new DataTable(typeof(T).Name);
 
-            PropertyInfo[] props = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-
-            foreach (var prop in props)
-            {
-                tb.Columns.Add(prop.Name, prop.PropertyType);
-            }
-
-            foreach (var item in items)
-            {
-                var values = new object[props.Length];
-                for (var i = 0; i < props.Length; i++)
-                {
-                    values[i] = props[i].GetValue(item, null);
-                }
-
-                tb.Rows.Add(values);
-            }
-
-            return tb;
-        }
-        public static object GetPropValue(object src, string propName)
-        {
-            return src.GetType().GetProperty(propName).GetValue(src, null);
-        }
     }
 }
