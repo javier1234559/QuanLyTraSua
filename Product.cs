@@ -75,7 +75,7 @@ namespace TeaStorel
             Console.WriteLine("Nhap gia san pham muon ban :");
             this.Price = Int32.Parse(Console.ReadLine());
 
-            Console.WriteLine("Nhap so luong san pham muon ton kho :");
+            Console.WriteLine("Nhap so luong san pham ton kho :");
             this.quantityInStock = Int32.Parse(Console.ReadLine());
 
             this.ProductID = CacheData.products.Any() ? CacheData.products.Max(x => x.ProductID) + 1 : 1; // tang id cua product len 1
@@ -145,10 +145,8 @@ namespace TeaStorel
             Console.WriteLine("Nhap gia von san pham muon sua:");
             this.OriginalPrice = Int32.Parse(Console.ReadLine());
 
-            Console.WriteLine("Nhap gia san pham muon sua  :");
-            this.Price = Int32.Parse(Console.ReadLine());
 
-            Console.WriteLine("Nhap gia san pham muon sua :");
+            Console.WriteLine("Nhap gia so luong san pham ton kho muon sua :");
             this.quantityInStock = Int32.Parse(Console.ReadLine());
 
             

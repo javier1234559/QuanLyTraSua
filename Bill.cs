@@ -5,7 +5,7 @@
         public int CusID { get; set; }
         public int StaffID { get; set; }
         public int DiscountID { get; set; }
-        public string Date;
+        public string Date { get; set; }
         public double Total { get; set; }
 
         public Bill()

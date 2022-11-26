@@ -8,7 +8,6 @@
         public long Salary { get; set; }
         public int AbsentDay { get; set; } = 0;
 
-        
         public Staff()
         {
             
@@ -28,7 +27,7 @@
             Console.Clear();
             Console.WriteLine(String.Format("{0}{1,-55}", "", "Nhan thong tin dang nhap"));
             Console.WriteLine(String.Format("{0}{1,-55}", "", "-----------------------"));
-            Console.WriteLine(String.Format("{0}{1,-15}", "1.", this.Name == null ? "Nhap ten khach hang" : String.Format("Ten nhan vien:{0,11}{1,2}", "|", Name)));
+            Console.WriteLine(String.Format("{0}{1,-15}", "1.", this.Name == null ? "Nhap ten nhan vien" : String.Format("Ten nhan vien:{0,11}{1,2}", "|", Name)));
             Console.WriteLine(String.Format("{0}{1,-15}", "2.", this.Numberphone == null ? "Nhap so dien thoai" : String.Format("So dien thoai:{0,12}{1,2}", "|", Numberphone)));
             Console.WriteLine("---------------------");
         }
@@ -55,10 +54,6 @@
                 return false;
             }
         }
-
-
-
-
 
 
 
