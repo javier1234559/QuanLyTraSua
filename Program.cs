@@ -20,7 +20,7 @@ namespace TeaStorel
     {
         static void Main(string[] args)
         {
-            Database<Bill>.CreateDatabase(); //tao san Database , Xoa di neu muon luu ket qua moi
+            //Database<Bill>.CreateDatabase(); //tao san Database , Xoa di neu muon luu ket qua moi
 
             Menu menu = new Menu();
             while (Menu.statusMenu)

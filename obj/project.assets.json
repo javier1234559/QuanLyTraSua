@@ -717,11 +717,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Admin\\Desktop\\C#\\TeaStorel\\TeaStorel.csproj",
+      "projectUniqueName": "C:\\Users\\Admin\\Desktop\\C#\\QUANLYTRASUA\\TeaStorel\\TeaStorel.csproj",
       "projectName": "TeaStorel",
-      "projectPath": "C:\\Users\\Admin\\Desktop\\C#\\TeaStorel\\TeaStorel.csproj",
+      "projectPath": "C:\\Users\\Admin\\Desktop\\C#\\QUANLYTRASUA\\TeaStorel\\TeaStorel.csproj",
       "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Admin\\Desktop\\C#\\TeaStorel\\obj\\",
+      "outputPath": "C:\\Users\\Admin\\Desktop\\C#\\QUANLYTRASUA\\TeaStorel\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "UqRiloOjsn9yXpxJKf023WxoJ3lWhneBh9Wh+mbCOMicty1iRdVaPv/RfZNEmkYjqCuRR25nxHDmBxd/n397Cg==",
+  "dgSpecHash": "QgQaArfmEJbQ5DVqbxZl2qiMz7MIHuny928eToZX3ilI2s3pD6V32ZayH1RptZOdob/WULbQ5p4oMwWkzm1DzQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Admin\\Desktop\\C#\\TeaStorel\\TeaStorel.csproj",
+  "projectFilePath": "C:\\Users\\Admin\\Desktop\\C#\\QUANLYTRASUA\\TeaStorel\\TeaStorel.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Admin\\.nuget\\packages\\consoletables\\2.4.2\\consoletables.2.4.2.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",

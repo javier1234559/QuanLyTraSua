@@ -54,7 +54,9 @@ namespace TeaStorel
 
                 //Giam so luong san pham ton kho
                 products.Where(p => p.ProductID == this.ProductID).First().quantityInStock -= this.ProductQuantity;
-                CacheData.orders.Add(this);
+
+                //CacheData.orders.Add(this); Add kieu nay se bi BUG add cac gia tri giong nhau vi this la 1 doi tuong  
+                CacheData.orders.Add(new Order(this.BillID,this.ProductID,this.ProductQuantity));
 
                 Console.Write("Them 1 order nua ? (y/n)");
                 string c = Console.ReadLine();

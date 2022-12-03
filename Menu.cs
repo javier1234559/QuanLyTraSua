@@ -161,20 +161,25 @@ namespace TeaStorel
                         order.AddThisOrderToDatabase();
                         Console.Write("Hay nhap ngay hom nay de biet giam gia (vd: 25/12): ");
                         string date = Console.ReadLine();
-                        Console.WriteLine("Nhap ma nhan vien neu co (y/n)");
-                        string ma = Console.ReadLine();
-                        if (ma == "y")
+                        while (true)
                         {
-                            int staffOderId = Int32.Parse(Console.ReadLine());
-                            this.discount.DiscountID = discount.CheckDiscount(date);
-                            this.bill = new Bill(cus.CusId, staffOderId, date, this.discount.DiscountID);
-                            bill.AddThisBillToCache();
-                        }
-                        else
-                        {
-                            this.discount.DiscountID = discount.CheckDiscount(date);
-                            this.bill = new Bill(cus.CusId, date, this.discount.DiscountID);
-                            bill.AddThisBillToCache();
+                            Console.Write("Nhap ma nhan vien neu co (y/n)");
+                            string ma = Console.ReadLine();
+                            if (ma == "y")
+                            {
+                                int staffOderId = Int32.Parse(Console.ReadLine());
+                                this.discount.DiscountID = discount.CheckDiscount(date);
+                                this.bill = new Bill(cus.CusId, staffOderId, date, this.discount.DiscountID);
+                                bill.AddThisBillToCache();
+                                break;
+                            }
+                            else if(ma == "n")
+                            {
+                                this.discount.DiscountID = discount.CheckDiscount(date);
+                                this.bill = new Bill(cus.CusId, date, this.discount.DiscountID);
+                                bill.AddThisBillToCache();
+                                break;
+                            }
                         }
                         break;
                     case "4":

@@ -45,6 +45,7 @@ namespace TeaStorel
             Console.WriteLine("Vui long nhap danh gia");
             this.rate = Int32.Parse(Console.ReadLine());
             Console.WriteLine("Cam on ban da danh gia !");
+            Console.ReadLine();
         }
 
 
